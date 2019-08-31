@@ -1,0 +1,6 @@
+package gowtk
+
+
+func Hello(){
+
+}
