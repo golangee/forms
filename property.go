@@ -1,25 +1,54 @@
 package gowtk
 
+import "strconv"
+
 type Property interface {
 	Value() interface{}
 	SetValue(v interface{})
 }
 
-type StringProperty interface {
-	String() string
-	SetString(str string)
-	OnChanged(func(old, new string))
-	Bind(other StringProperty) StringProperty
-	Property
+type StringProperty struct {
+	val string
 }
 
-type IntProperty interface {
-	Int() int
-	SetInt(i int) IntProperty
-	Inc() IntProperty
-	String()string
-	Property
+func (p *StringProperty) String() string {
+	return p.val
 }
+
+func (p *StringProperty) SetString(v string) StringProperty {
+	p.val = v
+	return *p
+}
+
+func (p *StringProperty) OnChanged(func(old, new string)) *StringProperty {
+	return p
+}
+
+type IntProperty struct {
+	val int
+}
+
+func (p *IntProperty) Int() int {
+	return p.val
+}
+
+func (p *IntProperty) SetInt(v int) *IntProperty {
+	p.val = v
+	return p
+}
+
+func (p *IntProperty) OnChanged(func(old, new string)) *IntProperty {
+	return p
+}
+
+func (p *IntProperty) Inc() *IntProperty {
+	return p
+}
+
+func (p *IntProperty) String() string {
+	return strconv.Itoa(p.val)
+}
+
 
 type BoolProperty interface {
 	Bool() bool
@@ -27,14 +56,7 @@ type BoolProperty interface {
 	Property
 }
 
-func Int(i int) IntProperty {
-	return nil
-}
 func Bool(b bool) BoolProperty {
-	return nil
-}
-
-func String(str string) StringProperty {
 	return nil
 }
 
