@@ -1,7 +1,7 @@
 package gowtk
 
 type View interface {
-	Children()[]View
+	Children() []View
 }
 
 type Component struct {
@@ -13,7 +13,7 @@ func (c *Component) OnClick(func()) *Component {
 	return c
 }
 
-func (c *Component)SetPadding(l, t, r, b int) *Component{
+func (c *Component) SetPadding(l, t, r, b int) *Component {
 	return c
 }
 
@@ -30,15 +30,15 @@ func (t *TextView) Children() []View {
 	return nil
 }
 
-func (t *TextView) SetContent(p string) *TextView{
+func (t *TextView) SetContent(p string) *TextView {
 	return t
 }
 
-func (t *TextView) SetFontSize(p int) *TextView{
+func (t *TextView) SetFontSize(p int) *TextView {
 	return t
 }
 
-func NewTextView()*TextView{
+func NewTextView() *TextView {
 	return &TextView{}
 }
 
@@ -51,7 +51,7 @@ func (t *Button) Children() []View {
 	return nil
 }
 
-func (t *Button) SetCaption(str string) *Button{
+func (t *Button) SetCaption(str string) *Button {
 	return t
 }
 
@@ -64,13 +64,14 @@ func (c *TextView) OnClick(f func()) *TextView {
 	c.Component.OnClick(f)
 	return c
 }
+
 // nearly "overloading", as go can do that
-func (c *TextView)SetPadding(l, t, r, b int) *TextView{
-	c.Component.SetPadding(l,t,r,b)
+func (c *TextView) SetPadding(l, t, r, b int) *TextView {
+	c.Component.SetPadding(l, t, r, b)
 	return c
 }
 
-type VBox struct{
+type VBox struct {
 	children []View
 }
 
@@ -78,11 +79,11 @@ func (b *VBox) Children() []View {
 	return b.children
 }
 
-func (b *VBox)Layout(view...View)*VBox{
+func (b *VBox) Layout(view ...View) *VBox {
+	b.children = append(b.children, view...)
 	return nil
 }
 
-func NewVBox(views...View)*VBox{
+func NewVBox(views ...View) *VBox {
 	return &VBox{}
 }
-

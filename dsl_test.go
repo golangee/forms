@@ -1,6 +1,9 @@
 package gowtk
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 //snip
 type MyView struct {
@@ -8,16 +11,12 @@ type MyView struct {
 
 	statusText TextView
 	button     Button
-	body       VBox
-}
-
-func (m *MyView) Children() []View {
-	return []View{&m.body}
+	VBox
 }
 
 func NewMyView() *MyView {
 	view := &MyView{}
-	view.body.Layout(
+	view.Layout(
 		NewTextView().
 			SetContent("MY COMPONENT").
 			SetFontSize(24),
@@ -36,7 +35,8 @@ func NewMyView() *MyView {
 //snap
 
 func TestMyView(t *testing.T) {
-	NewMyView()
+	var view View = NewMyView()
+	fmt.Printf("%#v\n", view)
 }
 
 /*
