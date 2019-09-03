@@ -2,6 +2,7 @@ package gowtk
 
 type View interface {
 	Children() []View
+	Layout()
 }
 
 type Component struct {
@@ -26,11 +27,16 @@ type TextView struct {
 	Component
 }
 
+func (t *TextView) Layout() {
+
+}
+
 func (t *TextView) Children() []View {
 	return nil
 }
 
 func (t *TextView) SetContent(p string) *TextView {
+	t.Content.SetString(p)
 	return t
 }
 
@@ -47,11 +53,16 @@ type Button struct {
 	Component
 }
 
+func (t *Button) Layout() {
+
+}
+
 func (t *Button) Children() []View {
 	return nil
 }
 
 func (t *Button) SetCaption(str string) *Button {
+	t.Content.SetString(str)
 	return t
 }
 
@@ -79,9 +90,17 @@ func (b *VBox) Children() []View {
 	return b.children
 }
 
-func (b *VBox) Layout(view ...View) *VBox {
+func (b *VBox) Layout() {
+	for _, v := range b.children {
+		v.Layout()
+	}
+}
+
+func (b *VBox) SetChildren(view ...View) *VBox {
+	b.children = nil //avoid memory leaks
 	b.children = append(b.children, view...)
-	return nil
+	b.Layout()
+	return b
 }
 
 func NewVBox(views ...View) *VBox {

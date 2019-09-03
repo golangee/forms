@@ -14,29 +14,46 @@ type MyView struct {
 	VBox
 }
 
-func NewMyView() *MyView {
-	view := &MyView{}
-	view.Layout(
+func (v *MyView) Layout() {
+	v.SetChildren(
 		NewTextView().
 			SetContent("MY COMPONENT").
 			SetFontSize(24),
-		view.statusText.
+		v.statusText.
 			SetContent("initial title text").
 			SetPadding(4, 4, 4, 4),
-		view.button.
+		v.button.
 			SetCaption("click me").
 			OnClick(func() {
-				view.statusText.SetContent("clicked: " + view.counter.Inc().String())
+				v.statusText.SetContent("clicked: " + v.counter.Inc().String())
 			}),
 	)
-	return view
+}
+
+func NewMyView() *MyView {
+	return &MyView{}
 }
 
 //snap
 
+type MyView2 struct {
+	MyView1 MyView
+	MyView2 MyView
+	VBox
+}
+
+func (v *MyView2) Layout() {
+	v.SetChildren(&v.MyView1, &v.MyView2)
+}
+
 func TestMyView(t *testing.T) {
 	var view View = NewMyView()
+	view.Layout()
 	fmt.Printf("%#v\n", view)
+
+	var root View = &MyView2{}
+	root.Layout()
+	fmt.Printf("%#v\n", root)
 }
 
 /*
