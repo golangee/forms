@@ -14,8 +14,8 @@ type MyView struct {
 	VBox
 }
 
-func (v *MyView) Layout() {
-	v.SetChildren(
+func (v *MyView) Attach() {
+	v.AddView(
 		NewTextView().
 			SetContent("MY COMPONENT").
 			SetFontSize(24),
@@ -26,6 +26,8 @@ func (v *MyView) Layout() {
 			SetCaption("click me").
 			OnClick(func() {
 				v.statusText.SetContent("clicked: " + v.counter.Inc().String())
+				addedView := NewTextView().SetContent("added view")
+				v.AddView(addedView)
 			}),
 	)
 }
@@ -42,17 +44,17 @@ type MyView2 struct {
 	VBox
 }
 
-func (v *MyView2) Layout() {
-	v.SetChildren(&v.MyView1, &v.MyView2)
+func (v *MyView2) Attach() {
+	v.AddView(&v.MyView1, &v.MyView2)
 }
 
 func TestMyView(t *testing.T) {
 	var view View = NewMyView()
-	view.Layout()
+	view.Attach()
 	fmt.Printf("%#v\n", view)
 
 	var root View = &MyView2{}
-	root.Layout()
+	root.Attach()
 	fmt.Printf("%#v\n", root)
 }
 
