@@ -1,7 +1,16 @@
 package gowtk
 
+import "image/color"
 
+type FontSpec struct {
+	Name string
+	Size int
+}
 
+var Green = color.RGBA{}
+
+var Title = FontSpec{}
+var SubHeadline = FontSpec{}
 
 type Context interface{}
 
@@ -29,7 +38,19 @@ func (t *TextView) SetFontSize(p int) *TextView {
 	return t
 }
 
-func NewTextView() *TextView {
+func (t *TextView) SetFont(fontType FontSpec) *TextView {
+	return t
+}
+
+func (t *TextView) SetForegroundColor(color color.Color) *TextView {
+	return t
+}
+
+func NewSpacer() View {
+	return nil
+}
+
+func NewText(str string) *TextView {
 	return &TextView{}
 }
 
