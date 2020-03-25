@@ -1,4 +1,4 @@
-package gowtk
+package main
 
 import (
 	"crypto/sha256"

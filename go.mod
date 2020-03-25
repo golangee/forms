@@ -1,3 +1,3 @@
-module github.com/worldiety/gowtk
+module github.com/worldiety/wtk
 
-go 1.12
+go 1.14

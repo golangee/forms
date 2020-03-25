@@ -1,6 +1,0 @@
-package gowtk
-
-
-func Hello(){
-
-}
