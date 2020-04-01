@@ -6,6 +6,10 @@ type absNode struct {
 	val js.Value
 }
 
+func (n absNode) Style() Style {
+	return Style{val: n.val.Get("style")}
+}
+
 // The TextContent property of the absNode interface represents the text content of the node and its descendants.
 func (n absNode) TextContent() string {
 	return n.val.Call("textContent").String()

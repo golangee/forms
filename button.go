@@ -1,41 +1,37 @@
 package wtk
 
-import (
-	"github.com/worldiety/wtk/dom"
-	"syscall/js"
-)
+import "github.com/worldiety/wtk/event"
 
 type Button struct {
-	model Model
-	btn   dom.Element
-	f     Handle
-	Text  string
+	Text string
+	*absComponent
 }
 
-func (t *Button) init() {
-	if t.f.Valid() {
-		return
-	}
-	t.btn = dom.CreateElement("button")
-	t.btn.SetInnerText(t.Text)
-	t.f = t.model.AddListener(func(v interface{}) {
-		t.btn.SetInnerHTML(t.Text)
-	})
-
+func NewButton(text string) *Button {
+	t := &Button{}
+	t.absComponent = newComponent(t, "button")
+	t.SetText(text)
+	return t
 }
 
-func (t *Button) attach(parent dom.Element) {
-	t.init()
-	parent.AppendChild(t.btn)
+func (t *Button) SetText(str string) *Button {
+	t.Text = str
+	t.absComponent.elem.SetInnerText(str)
+	return t
 }
 
-func (t *Button) detach(parent dom.Element) {
-	parent.RemoveChild(t.btn)
+func (t *Button) Style(style ...Style) *Button {
+	t.absComponent.style(style...)
+	return t
 }
 
-func (t *Button) AddOnClickListener(f func()) {
-	t.init()
-	_ = t.btn.AddEventListener("click", func(value js.Value) {
-		f()
-	}, false)
+// Self assigns the receiver to the given reference
+func (t *Button) Self(ref **Button) *Button {
+	*ref = t
+	return t
+}
+
+func (t *Button) AddClickListener(f func(v View)) *Button {
+	t.addEventListener(event.Click, f)
+	return t
 }

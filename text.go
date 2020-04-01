@@ -1,31 +1,30 @@
 package wtk
 
-import (
-	"github.com/worldiety/wtk/dom"
-)
-
 type Text struct {
-	Value String
-	p     dom.Element
-	f     Func
+	Value string
+	*absComponent
 }
 
-func (t *Text) init() {
-	if t.f.Valid() {
-		return
-	}
-	t.p = dom.CreateElement("p")
-	t.p.SetInnerText(t.Value.Get())
-	t.f = t.Value.AddListener(func(old interface{}, new interface{}) {
-		t.p.SetInnerHTML(t.Value.Get())
-	})
+func NewText(str string) *Text {
+	t := &Text{}
+	t.absComponent = newComponent(t, "p")
+	t.SetValue(str)
+	return t
 }
 
-func (t *Text) attach(parent dom.Element) {
-	t.init()
-	parent.AppendChild(t.p)
+func (t *Text) SetValue(str string) *Text {
+	t.Value = str
+	t.absComponent.elem.SetInnerText(str)
+	return t
 }
 
-func (t *Text) detach(parent dom.Element) {
-	parent.RemoveChild(t.p)
+func (t *Text) Style(style ...Style) *Text {
+	t.absComponent.style(style...)
+	return t
+}
+
+// Self assigns the receiver to the given pointer to reference
+func (t *Text) Self(ref **Text) *Text {
+	*ref = t
+	return t
 }

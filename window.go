@@ -8,6 +8,23 @@ type Window struct {
 	window dom.Window
 }
 
+func (w Window) attach(parent View) {
+}
+
+func (w Window) detach() {
+}
+
+func (w Window) parent() View {
+	return nil
+}
+
+func (w Window) node() dom.Element {
+	return w.window.Document().Body()
+}
+
+func (w Window) Release() {
+}
+
 func newWindow() Window {
 	return Window{window: dom.GetWindow()}
 }
@@ -17,5 +34,6 @@ func (w Window) RemoveAll() {
 }
 
 func (w Window) AddView(v View) {
-	v.attach(w.window.Document().Body())
+	v.attach(w)
+	w.node().AppendChild(v.node())
 }

@@ -1,41 +1,29 @@
 package wtk
 
-import (
-	"github.com/worldiety/wtk/dom"
-)
-
 type VStack struct {
-	model Model
-	div   dom.Element
-	cb    Handle
-	views []View
+	*absComponent
 }
 
-func (s *VStack) init() {
-	if s.cb.Valid() {
-		return
+func NewVStack() *VStack {
+	t := &VStack{}
+	t.absComponent = newComponent(t, "div")
+	return t
+}
+
+func (t *VStack) AddViews(views ...View) *VStack {
+	for _, v := range views {
+		t.addView(v)
 	}
-	s.div = dom.CreateElement("div")
-	s.cb = s.model.AddListener(func(model interface{}) {
-		s.div.SetInnerText("")
-		for _, view := range model.([]View) {
-			view.attach(s.div)
-		}
-	})
+	return t
 }
 
-func (s *VStack) attach(parent dom.Element) {
-	s.init()
-	parent.AppendChild(s.div)
+func (t *VStack) Style(style ...Style) *VStack {
+	t.absComponent.style(style...)
+	return t
 }
 
-func (s *VStack) detach(parent dom.Element) {
-	parent.RemoveChild(s.div)
-}
-
-func (s *VStack) AddView(view View) {
-	s.init()
-	s.views = append(s.views, view)
-	s.model.Value = s.views
-	s.model.Notify()
+// Self assigns the receiver to the given reference
+func (t *VStack) Self(ref **VStack) *VStack {
+	*ref = t
+	return t
 }
