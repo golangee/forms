@@ -6,6 +6,7 @@ type Style struct {
 	val js.Value
 }
 
+
 func (s Style) SetColor(v string) {
 	s.val.Set("color", v)
 }

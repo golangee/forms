@@ -11,3 +11,7 @@ type Element struct {
 	absEventTarget
 }
 
+func (s Element) AddClass(v string) {
+	s.val.Get("classList").Call("add", v)
+}
+

@@ -6,8 +6,10 @@ import (
 
 type Color uint32
 
+var Green = RGBA(0, 255, 0, 255)
+
 func RGBA(r, g, b, a byte) Color {
-	return Color(uint32(r) | uint32(g)<<8 | uint32(b)<<16 | uint32(a)<<24)
+	return Color(uint32(r)<<24 | uint32(g)<<16 | uint32(b)<<8 | uint32(a))
 }
 
 func (c Color) Red() byte {

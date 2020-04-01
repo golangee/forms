@@ -1,6 +1,12 @@
 package wtk
 
-import "github.com/worldiety/wtk/dom"
+import (
+	"fmt"
+	"github.com/worldiety/wtk/dom"
+	"log"
+	"runtime"
+	"strings"
+)
 
 var Root = newWindow()
 
@@ -36,4 +42,25 @@ func (w Window) RemoveAll() {
 func (w Window) AddView(v View) {
 	v.attach(w)
 	w.node().AppendChild(v.node())
+}
+
+func Run(target View, init func()) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("GOT THE PANIC")
+			b := make([]byte, 2048) // adjust buffer size to be larger than expected stack
+			n := runtime.Stack(b, false)
+			s := fmt.Sprintf("%v:\n", r) + string(b[:n])
+			target.node().SetTextContent("")
+			lines := strings.Split(s, "\n")
+			for _, line := range lines {
+				e := dom.CreateElement("p")
+				//	e.Style().AddClass("stacktraceLine")
+				e.SetTextContent(line)
+				target.node().AppendChild(e)
+			}
+
+		}
+	}()
+	init()
 }

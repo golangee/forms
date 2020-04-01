@@ -24,7 +24,7 @@ func newComponent(self View, tag string) *absComponent {
 
 func (b *absComponent) style(styles ...Style) *absComponent {
 	for _, s := range styles {
-		s.apply(b.elem)
+		s.applyCSS(b.elem)
 	}
 	return b
 }

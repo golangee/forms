@@ -8,11 +8,11 @@ type Text struct {
 func NewText(str string) *Text {
 	t := &Text{}
 	t.absComponent = newComponent(t, "p")
-	t.SetValue(str)
+	t.Set(str)
 	return t
 }
 
-func (t *Text) SetValue(str string) *Text {
+func (t *Text) Set(str string) *Text {
 	t.Value = str
 	t.absComponent.elem.SetInnerText(str)
 	return t
