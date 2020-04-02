@@ -11,7 +11,17 @@ type Element struct {
 	absEventTarget
 }
 
-func (s Element) AddClass(v string) {
-	s.val.Get("classList").Call("add", v)
+func (s Element) SetClassName(str string) Element {
+	s.val.Set("className", str)
+	return s
 }
 
+func (s Element) AddClass(v string) Element {
+	s.val.Get("classList").Call("add", v)
+	return s
+}
+
+func (s Element) SetDisabled(b bool) Element {
+	s.val.Set("disabled", b)
+	return s
+}

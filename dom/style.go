@@ -6,7 +6,6 @@ type Style struct {
 	val js.Value
 }
 
-
 func (s Style) SetColor(v string) {
 	s.val.Set("color", v)
 }
@@ -17,4 +16,8 @@ func (s Style) SetPaddingLeft(v string) {
 
 func (s Style) Unwrap() js.Value {
 	return s.val
+}
+
+func (s Style) Set(k, v string) {
+	s.val.Set(k, v)
 }

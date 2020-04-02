@@ -36,8 +36,9 @@ func (n absNode) SetInnerHTML(v string) {
 	n.val.Set("innerHTML", v)
 }
 
-func (n absNode) SetInnerText(v string) {
+func (n absNode) SetInnerText(v string) absNode {
 	n.val.Set("innerText", v)
+	return n
 }
 
 // The absNode.appendChild() method adds a node to the end of the list of children of a specified parent node. If the given child is a reference to an existing node in the document, appendChild() moves it from its current position to the new position (there is no requirement to remove the node from its parent node before appending it to some other node).
@@ -49,10 +50,18 @@ func (n absNode) AppendChild(aChild Node) Node {
 	return absNode{n.val.Call("appendChild", aChild.Unwrap())}
 }
 
+func (n absNode) InsertBefore(newNode, refNode Node) Node {
+	return absNode{n.val.Call("insertBefore", newNode.Unwrap(), refNode.Unwrap())}
+}
+
 func (n absNode) RemoveChild(aChild Node) Node {
 	return absNode{n.val.Call("removeChild", aChild.Unwrap())}
 }
 
 func (n absNode) Unwrap() js.Value {
 	return n.val
+}
+
+func (n absNode) NextSibling() Node {
+	return absNode{n.val.Get("nextSibling")}
 }

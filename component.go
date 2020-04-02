@@ -22,6 +22,11 @@ func newComponent(self View, tag string) *absComponent {
 	}
 }
 
+func (b *absComponent) addResource(r Resource) *absComponent {
+	b.resources = append(b.resources, r)
+	return b
+}
+
 func (b *absComponent) style(styles ...Style) *absComponent {
 	for _, s := range styles {
 		s.applyCSS(b.elem)

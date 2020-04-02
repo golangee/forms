@@ -7,6 +7,7 @@ import (
 type FontStyle string
 
 const Title FontStyle = "titleText"
+const SubHeading FontStyle = "subHeading"
 
 // A Style modifies different kinds of visualization of a View.
 type Style interface {
