@@ -96,6 +96,26 @@
     margin-bottom: 20px;
 }
 
+.mdc-typography--headline2 {
+    margin-bottom: 20px;
+}
+
+.mdc-typography--headline3 {
+    margin-bottom: 12px;
+}
+
+.mdc-typography--headline4 {
+    margin-bottom: 12px;
+}
+
+.mdc-typography--headline5 {
+    margin-bottom: 12px;
+}
+
+.mdc-typography--headline6 {
+    margin-bottom: 12px;
+}
+
 
 .mdc-typography--body1 {
     color: #5f6368;
