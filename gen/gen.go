@@ -9,20 +9,51 @@ import (
 	"unicode"
 )
 
+type resEntry struct {
+	brotli string
+	gz     string
+}
+
 func main() {
 
 	dir, _ := os.Getwd()
 	materialDir := filepath.Join(dir, "theme", "material")
 	files, _ := ioutil.ReadDir(materialDir)
+	collection := make(map[string]resEntry)
 	var toEmbedd []string
 	for _, file := range files {
 		if filepath.Ext(file.Name()) == ".br" || filepath.Ext(file.Name()) == ".gz" {
-			toEmbedd = append(toEmbedd, filepath.Join(materialDir, file.Name()))
+			fname := filepath.Join(materialDir, file.Name())
+			realName := file.Name()[0 : len(file.Name())-3]
+			if _, ok := collection[realName]; !ok {
+				collection[realName] = resEntry{}
+			}
+			val := collection[realName]
+			if strings.HasSuffix(file.Name(), ".br") {
+				val.brotli = fname
+			} else {
+				val.gz = fname
+			}
+			collection[realName] = val
+
+			toEmbedd = append(toEmbedd, fname)
 		}
 	}
 
 	sb := strings.Builder{}
-	sb.WriteString("package material\n")
+	sb.WriteString("package material\n\n")
+
+	sb.WriteString("func files() map[string]res {\n")
+	sb.WriteString("	myFiles := make(map[string]res)\n")
+	for realName, res := range collection {
+		vBr :=  varName(filepath.Base(res.brotli))
+		vGz := varName(filepath.Base(res.gz))
+		sb.WriteString("	myFiles[\"/material/" + realName + "\"] = res{mustDecodeBase64(" +vBr + "), mustDecodeBase64(" +vGz +")}\n")
+		//files["/material/materialicons.woff2"] = res{mustDecodeBase64(materialiconswoffbr), mustDecodeBase64(materialiconswoffgz)}
+	}
+	sb.WriteString("	return myFiles\n")
+	sb.WriteString("}\n\n")
+
 	for _, file := range toEmbedd {
 		dat, err := ioutil.ReadFile(file)
 		if err != nil {
@@ -42,8 +73,8 @@ func main() {
 func varName(str string) string {
 	sb := &strings.Builder{}
 	for _, r := range str {
-		if r >= 'a' && r <= 'z' {
-			sb.WriteRune(r)
+		if r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' {
+			sb.WriteRune(unicode.ToLower(r))
 		}
 	}
 	return sb.String()

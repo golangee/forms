@@ -6,8 +6,21 @@ import (
 
 type FontStyle string
 
-const Title FontStyle = "titleText"
-const SubHeading FontStyle = "subHeading"
+const Headline1 FontStyle = "mdc-typography--headline1"
+const Headline2 FontStyle = "mdc-typography--headline2"
+const Headline3 FontStyle = "mdc-typography--headline3"
+const Headline4 FontStyle = "mdc-typography--headline4"
+const Headline5 FontStyle = "mdc-typography--headline5"
+const Headline6 FontStyle = "mdc-typography--headline6"
+const Body FontStyle = "mdc-typography--body1"
+const Body2 FontStyle = "mdc-typography--body2"
+const Subtitle1 FontStyle = "mdc-typography--subtitle1"
+const Subtitle2 FontStyle = "mdc-typography--subtitle1"
+const Caption FontStyle = "mdc-typography--caption"
+const Btn FontStyle = "mdc-typography--button"
+const Overline FontStyle = "mdc-typography--overline"
+
+var DefaultPadding = 8.0
 
 // A Style modifies different kinds of visualization of a View.
 type Style interface {
@@ -27,6 +40,30 @@ func (s styleFunc) applyCSS(element dom.Element) {
 func PadLeft(v float64) Style {
 	return styleFunc(func(element dom.Element) {
 		element.Style().SetPaddingLeft(floatToPx(v))
+	})
+}
+
+func PadTop(v float64) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().SetPaddingTop(floatToPx(v))
+	})
+}
+
+func PadBottom(v float64) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().SetPaddingBottom(floatToPx(v))
+	})
+}
+
+func Padding() Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().SetPadding(floatToPx(DefaultPadding))
+	})
+}
+
+func Margin() Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().SetMargin(floatToPx(DefaultPadding))
 	})
 }
 

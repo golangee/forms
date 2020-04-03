@@ -8,10 +8,13 @@ import (
 	"strings"
 )
 
-var Root = newWindow()
-
 type Window struct {
 	window dom.Window
+	ctx    Context
+}
+
+func (w Window) Context() Context {
+	return w.ctx
 }
 
 func (w Window) attach(parent View) {
@@ -31,9 +34,6 @@ func (w Window) node() dom.Element {
 func (w Window) Release() {
 }
 
-func newWindow() Window {
-	return Window{window: dom.GetWindow()}
-}
 
 func (w Window) RemoveAll() {
 	w.window.Document().Body().SetInnerHTML("")

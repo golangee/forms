@@ -14,11 +14,7 @@ type res struct {
 }
 
 func Resources(handler interface{ HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request)) }) {
-	files := make(map[string]res)
-	files["/material/wtk.css"] = res{mustDecodeBase64(wtkcssbr), mustDecodeBase64(wtkcssgz)}
-	files["/material/material-components-web.min.css"] = res{mustDecodeBase64(materialcomponentswebmincssbr), mustDecodeBase64(materialcomponentswebmincssgz)}
-	files["/material/material-components-web.min.js"] = res{mustDecodeBase64(materialcomponentswebminjsbr), mustDecodeBase64(materialcomponentswebminjsgz)}
-	files["/material/materialicons.woff2"] = res{mustDecodeBase64(materialiconswoffbr), mustDecodeBase64(materialiconswoffgz)}
+	files := files()
 
 	handler.HandleFunc("/material/", func(writer http.ResponseWriter, request *http.Request) {
 		path := request.URL.Path
@@ -29,6 +25,8 @@ func Resources(handler interface{ HandleFunc(pattern string, handler func(http.R
 			writer.Header().Set("content-type", "application/javascript")
 		case ".woff2":
 			writer.Header().Set("content-type", "font/woff2")
+		case ".ttf":
+			writer.Header().Set("content-type", "font/ttf")
 		default:
 			writer.Header().Set("content-type", "application/octet")
 		}

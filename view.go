@@ -19,6 +19,7 @@ type Resource interface {
 type View interface {
 	internalView
 	Resource
+	Context() Context // Context of View, usually taken from the top-most root, where parent is nil
 }
 
 // internalView contains implementation specific details, which we don't want developers to depend on.

@@ -12,6 +12,7 @@ func NewVStack() *VStack {
 
 func (t *VStack) AddViews(views ...View) *VStack {
 	for _, v := range views {
+		v.node().Style().Set("display","block")
 		t.addView(v)
 	}
 	return t

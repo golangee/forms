@@ -36,7 +36,7 @@ func (b *absComponent) style(styles ...Style) *absComponent {
 
 func (b *absComponent) attach(parent View) {
 	assertNotAttached(b)
-	b.par = parent.parent()
+	b.par = parent
 }
 
 func (b *absComponent) detach() {
@@ -97,4 +97,11 @@ func (b *absComponent) addEventListener(t event.Type, f func(v View)) {
 		return nil
 	}, false)
 	b.resources = append(b.resources, ref)
+}
+
+func (b *absComponent) Context() Context {
+	if b.parent() == nil {
+		return nil
+	}
+	return b.parent().Context()
 }

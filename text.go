@@ -7,7 +7,7 @@ type Text struct {
 
 func NewText(str string) *Text {
 	t := &Text{}
-	t.absComponent = newComponent(t, "p")
+	t.absComponent = newComponent(t, "span")
 	t.Set(str)
 	return t
 }
