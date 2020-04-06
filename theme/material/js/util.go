@@ -10,15 +10,19 @@ type MDCName string
 
 const Ripple MDCName = "ripple"
 const TextField MDCName = "textField"
+const Dialog MDCName = "dialog"
 
 type Foundation struct {
 	val js.Value
 }
 
 func (f Foundation) Release() {
-	if f.IsValid(){
+	if f.IsValid() {
 		f.val.Call("destroy")
 	}
+}
+func (f Foundation) Unwrap() js.Value {
+	return f.val
 }
 
 func (f Foundation) IsValid() bool {

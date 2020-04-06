@@ -7,12 +7,13 @@ import (
 	"github.com/worldiety/wtk/theme/material/js"
 )
 
-type StyleKind string
+type ButtonStyleKind string
 
-const Default StyleKind = ""
-const Raised StyleKind = "--raised"
-const Unelevated StyleKind = "--unelevated"
-const Outlined StyleKind = "--outlined"
+const Default ButtonStyleKind = "mdc-button"
+const Raised ButtonStyleKind = "mdc-button--raised"
+const Unelevated ButtonStyleKind = "mdc-button--unelevated"
+const Outlined ButtonStyleKind = "mdc-button--outlined"
+const Dlg ButtonStyleKind = "mdc-dialog__button"
 
 type Alignment string
 
@@ -51,8 +52,8 @@ func (t *Button) AddIcon(icon icon.Icon, alignment Alignment) *Button {
 	return t
 }
 
-func (t *Button) SetStyleKind(s StyleKind) *Button {
-	t.node().SetClassName("mdc-button mdc-button" + string(s))
+func (t *Button) SetStyleKind(s ButtonStyleKind) *Button {
+	t.node().SetClassName("mdc-button " + string(s))
 	return t
 }
 

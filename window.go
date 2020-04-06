@@ -13,35 +13,39 @@ type Window struct {
 	ctx    Context
 }
 
-func (w Window) Context() Context {
+func (w *Window) Context() Context {
 	return w.ctx
 }
 
-func (w Window) attach(parent View) {
+func (w *Window) attach(parent View) {
 }
 
-func (w Window) detach() {
+func (w *Window) detach() {
 }
 
-func (w Window) parent() View {
+func (w *Window) parent() View {
 	return nil
 }
 
-func (w Window) node() dom.Element {
+func (w *Window) node() dom.Element {
 	return w.window.Document().Body()
 }
 
-func (w Window) Release() {
+func (w *Window) Release() {
 }
 
-
-func (w Window) RemoveAll() {
+func (w *Window) RemoveAll() {
 	w.window.Document().Body().SetInnerHTML("")
 }
 
-func (w Window) AddView(v View) {
+func (w *Window) AddView(v View) {
 	v.attach(w)
 	w.node().AppendChild(v.node())
+}
+
+func (w *Window) RemoveView(v View) {
+	v.detach()
+	//w.node().RemoveChild(v.node()) currently the child calls it at the parents node, seems like a bad separation
 }
 
 func Run(target View, init func()) {

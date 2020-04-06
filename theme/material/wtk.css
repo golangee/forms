@@ -186,3 +186,8 @@
     /* @noflip */
     left: auto;
 }
+
+/*looks broken, better at 100%?*/
+.mdc-dialog__container {
+    width: 100%;
+}
