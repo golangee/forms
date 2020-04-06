@@ -2,6 +2,7 @@ package wtk
 
 import (
 	"github.com/worldiety/wtk/dom"
+	"strconv"
 )
 
 type FontStyle string
@@ -82,5 +83,17 @@ func ForegroundColor(color Color) Style {
 func Font(name FontStyle) Style {
 	return styleFunc(func(element dom.Element) {
 		element.AddClass(string(name))
+	})
+}
+
+type Scalar string
+
+func Percent(i int) Scalar {
+	return Scalar(strconv.Itoa(i) + "%")
+}
+
+func Width(scalar Scalar) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().Set("width", string(scalar))
 	})
 }
