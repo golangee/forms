@@ -148,3 +148,41 @@
     color: #9c3328;
 }
 
+/* bugfixes in material design distribution*/
+
+/*missing*/
+.mdc-text-field--with-leading-icon .mdc-text-field__icon {
+    /* @noflip */
+    left: 16px;
+    /* @noflip */
+    right: initial;
+}
+
+/*missing*/
+.mdc-text-field--with-leading-icon.mdc-text-field--with-trailing-icon .mdc-text-field__icon {
+    /* @noflip */
+    left: 16px;
+    /* @noflip */
+    right: auto;
+}
+
+/*missing*/
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__icon {
+    color: rgba(0, 0, 0, .54);
+}
+
+/*missing*/
+.mdc-text-field--with-trailing-icon .mdc-text-field__icon {
+    /* @noflip */
+    left: initial;
+    /* @noflip */
+    right: 12px;
+}
+
+/*missing*/
+.mdc-text-field--with-leading-icon.mdc-text-field--with-trailing-icon .mdc-text-field__icon ~ .mdc-text-field__icon {
+    /* @noflip */
+    right: 12px;
+    /* @noflip */
+    left: auto;
+}

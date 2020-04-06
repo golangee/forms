@@ -9,13 +9,20 @@ import (
 type MDCName string
 
 const Ripple MDCName = "ripple"
+const TextField MDCName = "textField"
 
 type Foundation struct {
 	val js.Value
 }
 
 func (f Foundation) Release() {
-	f.val.Call("destroy")
+	if f.IsValid(){
+		f.val.Call("destroy")
+	}
+}
+
+func (f Foundation) IsValid() bool {
+	return !f.val.IsUndefined() && !f.val.IsNull()
 }
 
 // Attach invokes new mdc.<name>.MDC<Name> to apply the material web foundation magic

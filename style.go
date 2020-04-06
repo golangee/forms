@@ -61,6 +61,12 @@ func Padding() Style {
 	})
 }
 
+func Repel() Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().SetMarginBottom("1em")
+	})
+}
+
 func Margin() Style {
 	return styleFunc(func(element dom.Element) {
 		element.Style().SetMargin(floatToPx(DefaultPadding))

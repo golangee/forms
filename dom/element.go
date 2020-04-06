@@ -21,7 +21,25 @@ func (s Element) AddClass(v string) Element {
 	return s
 }
 
+func (s Element) RemoveClass(v string) Element {
+	s.val.Get("classList").Call("remove", v)
+	return s
+}
+
 func (s Element) SetDisabled(b bool) Element {
 	s.val.Set("disabled", b)
+	return s
+}
+
+func (s Element) SetId(id string) Element {
+	s.val.Set("id", id)
+	return s
+}
+
+func (s Element) Id() string {
+	return s.val.Get("id").String()
+}
+func (s Element) SetFor(id string) Element {
+	s.val.Set("for", id)
 	return s
 }

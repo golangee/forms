@@ -2,6 +2,8 @@ package wtk
 
 import "strconv"
 
+var htmlId = 1
+
 // assertNotAttached bails out if parent is not nil
 func assertNotAttached(v View) {
 	if v.parent() != nil {
@@ -18,4 +20,9 @@ func assertAttached(v View) {
 
 func floatToPx(v float64) string {
 	return strconv.Itoa(int(v)) + "px"
+}
+
+func nextId() string {
+	htmlId++
+	return "id-" + strconv.Itoa(htmlId)
 }

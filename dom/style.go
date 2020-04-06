@@ -30,6 +30,10 @@ func (s Style) SetMargin(v string) {
 	s.val.Set("margin", v)
 }
 
+func (s Style) SetMarginBottom(v string) {
+	s.val.Set("margin-bottom", v)
+}
+
 func (s Style) Unwrap() js.Value {
 	return s.val
 }
