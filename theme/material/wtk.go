@@ -19,8 +19,12 @@ func Resources(handler interface{ HandleFunc(pattern string, handler func(http.R
 	handler.HandleFunc("/material/", func(writer http.ResponseWriter, request *http.Request) {
 		path := request.URL.Path
 		switch filepath.Ext(path) {
+		case ".css.map":
+			writer.Header().Set("content-type", "application/json")
 		case ".css":
 			writer.Header().Set("content-type", "text/css")
+		case ".js.map":
+			writer.Header().Set("content-type", "application/json")
 		case ".js":
 			writer.Header().Set("content-type", "application/javascript")
 		case ".woff2":

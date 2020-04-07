@@ -11,6 +11,8 @@ type MDCName string
 const Ripple MDCName = "ripple"
 const TextField MDCName = "textField"
 const Dialog MDCName = "dialog"
+const Menu MDCName = "menu"
+const MenuSurface MDCName = "menuSurface"
 
 type Foundation struct {
 	val js.Value
@@ -18,6 +20,7 @@ type Foundation struct {
 
 func (f Foundation) Release() {
 	if f.IsValid() {
+		//log.Println("destroyed ", f.val)
 		f.val.Call("destroy")
 	}
 }

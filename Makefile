@@ -47,12 +47,15 @@ run: build ## Starts the compiled program
 
 updateMDC: ## updates Material Components for Web
 	curl -L https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css -o theme/material/material-components-web.min.css
+	curl -L https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css.map -o theme/material/material-components-web.min.css.map
 	curl -L https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js -o theme/material/material-components-web.min.js
+	curl -L https://unpkg.com/material-components-web@latest/dist/material-components-web.js.map -o theme/material/material-components-web.js.map
+	curl -L https://unpkg.com/material-components-web@latest/dist/material-components-web.js -o theme/material/material-components-web.js
 	curl -L https://fonts.gstatic.com/s/materialicons/v50/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2 -o theme/material/materialicons.woff2
 
 embedd: ## embedds theme/material
-	$(shell find -E theme/material/ -regex '.*\.(wasm|js|html|css|woff2|ttf)'  -exec brotli -f -Z -w 24 "{}" \; )
-	$(shell find -E theme/material/ -regex '.*\.(wasm|js|html|css|woff2|ttf)'  -exec gzip -k -f --best "{}" \; )
+	$(shell find -E theme/material/ -regex '.*\.(wasm|js|html|css|woff2|ttf|map)'  -exec brotli -f -Z -w 24 "{}" \; )
+	$(shell find -E theme/material/ -regex '.*\.(wasm|js|html|css|woff2|ttf|map)'  -exec gzip -k -f --best "{}" \; )
 	${GO} run gen/gen.go
 
 generate: ## Executes go generate

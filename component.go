@@ -82,6 +82,7 @@ func (b *absComponent) parent() View {
 }
 
 func (b *absComponent) Release() {
+	//log.Println("release of ", reflect.TypeOf(b.this).String())
 	for _, child := range b.children {
 		child.Release()
 	}

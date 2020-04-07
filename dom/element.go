@@ -36,10 +36,35 @@ func (s Element) SetId(id string) Element {
 	return s
 }
 
+func (s Element) SetRole(r string) Element {
+	s.val.Set("role", r)
+	return s
+}
+
+func (s Element) SetAriaHidden(b bool) Element {
+	s.val.Set("aria-hidden", b)
+	return s
+}
+
+func (s Element) SetTabIndex(i int) Element {
+	s.val.Set("tabindex", i)
+	return s
+}
+
+func (s Element) SetAriaOrientation(o string) Element {
+	s.val.Set("aria-orientation", o)
+	return s
+}
+
 func (s Element) Id() string {
 	return s.val.Get("id").String()
 }
 func (s Element) SetFor(id string) Element {
 	s.val.Set("for", id)
+	return s
+}
+
+func (s Element) SetText(v string) Element {
+	s.absNode.SetTextContent(v)
 	return s
 }
