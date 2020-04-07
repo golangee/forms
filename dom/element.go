@@ -56,6 +56,11 @@ func (s Element) SetAriaOrientation(o string) Element {
 	return s
 }
 
+func (s Element) SetAriaLabel(l string) Element {
+	s.val.Set("aria-label", l)
+	return s
+}
+
 func (s Element) Id() string {
 	return s.val.Get("id").String()
 }

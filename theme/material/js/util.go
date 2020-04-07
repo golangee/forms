@@ -13,6 +13,7 @@ const TextField MDCName = "textField"
 const Dialog MDCName = "dialog"
 const Menu MDCName = "menu"
 const MenuSurface MDCName = "menuSurface"
+const TopAppBar MDCName = "topAppBar"
 
 type Foundation struct {
 	val js.Value

@@ -191,3 +191,8 @@
 .mdc-dialog__container {
     width: 100%;
 }
+
+/* otherwise user agent style sheet applies with 8px margin by default*/
+body {
+    margin: 0;
+}

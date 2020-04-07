@@ -74,6 +74,12 @@ func Margin() Style {
 	})
 }
 
+func MarginTop(scalar Scalar) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().SetMarginTop(string(scalar))
+	})
+}
+
 func ForegroundColor(color Color) Style {
 	return styleFunc(func(element dom.Element) {
 		element.Style().SetColor(color.String())
@@ -90,6 +96,10 @@ type Scalar string
 
 func Percent(i int) Scalar {
 	return Scalar(strconv.Itoa(i) + "%")
+}
+
+func Pixel(i int) Scalar {
+	return Scalar(strconv.Itoa(i) + "px")
 }
 
 func Width(scalar Scalar) Style {
