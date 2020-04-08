@@ -49,7 +49,7 @@ func (t *Dialog) Show(parent View) {
 		return
 	}
 	wnd.AddView(t)
-	var closedFunc js2.Func
+	var closedFunc dom.Func
 	closedFunc = t.node().AddEventListener("MDCDialog:closed", func(this js2.Value, args []js2.Value) interface{} {
 		t.destroy(parent)
 		closedFunc.Release()

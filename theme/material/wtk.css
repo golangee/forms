@@ -222,6 +222,10 @@ body {
     text-decoration-color: initial;
 }
 
+.mdc-top-app-bar__navigation-icon.mdc-icon-button {
+    display: none;
+}
+
 /* for our responsive side menu, we need a fixed background, if content is larger than menu */
 .behindSideMenu {
     position: fixed;
@@ -233,13 +237,21 @@ body {
     border-right-style: solid;
 }
 
-/* the responsive movement pushes it out of screen*/
-.mdc-top-app-bar__section--align-end {
-    margin-right: 255px;
+
+.wtk-drawer.mdc-drawer {
+    margin-top: 64px;
+}
+
+.wtk-bar.mdc-top-app-bar {
+    z-index: 7;
 }
 
 @media (max-width: 900px) {
     .mdc-top-app-bar__navigation-icon {
+        display: block;
+    }
+
+    .mdc-top-app-bar__navigation-icon.mdc-icon-button {
         display: block;
     }
 
@@ -248,19 +260,23 @@ body {
         display: none;
     }
 
-    /* the responsive movement pushes it out of screen*/
-    .mdc-top-app-bar__section--align-end {
-        margin-right: 0;
+
+    .wtk-bar.mdc-top-app-bar {
+        z-index: 4;
     }
 
+    .wtk-drawer.mdc-drawer {
+        margin-top: 0;
+    }
 }
 
 :root {
     --mdc-typography-body1-font-size: 16px;
+    -webkit-text-size-adjust: 100%;
 }
 
 /* avoid browsers to do what they want*/
-span{
+span {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     font-family: var(--mdc-typography-body1-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));

@@ -53,6 +53,7 @@ func (w *Window) RemoveAll() {
 	w.window.Document().Body().SetInnerHTML("")
 	w.views = nil
 	w.clearListeners()
+	w.window.Document().Body().Unwrap().Set("scrollTop",0)
 }
 
 func (w *Window) AddView(v View) {

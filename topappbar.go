@@ -45,7 +45,9 @@ func (t *TopAppBar) Self(ref **TopAppBar) *TopAppBar {
 	return t
 }
 
-// topAppBarStyleStandard is only fixed, because the standard is broken with scrolling. Dunno why
+// topAppBarStyleStandard is only fixed, because the standard is broken with scrolling. Dunno why, but it
+// looks like the offset calculation is broken when changing the content dynamically, because if the browser window
+// is resized, it starts working
 type topAppBarStyleStandard struct {
 	header           dom.Element
 	row              dom.Element
@@ -72,7 +74,7 @@ type topAppBarStyleStandard struct {
 //  </header>
 func newTopAppBarStyleStandard(parent *TopAppBar) *topAppBarStyleStandard {
 	t := &topAppBarStyleStandard{parent: parent}
-	t.header = t.parent.node().SetClassName("mdc-top-app-bar") // mdc-top-app-bar--fixed
+	t.header = t.parent.node().SetClassName("wtk-bar mdc-top-app-bar mdc-top-app-bar--fixed") //
 	t.row = dom.CreateElement("div").AddClass("mdc-top-app-bar__row")
 	t.header.AppendChild(t.row)
 	t.left = dom.CreateElement("section").SetClassName("mdc-top-app-bar__section mdc-top-app-bar__section--align-start")
@@ -85,10 +87,11 @@ func newTopAppBarStyleStandard(parent *TopAppBar) *topAppBarStyleStandard {
 }
 
 func (t *topAppBarStyleStandard) rebuild() {
-	t.fnd.Release()
+	//t.releaseFoundation()
+
 	t.left.SetTextContent("")
 	if len(t.navigationIcon) > 0 {
-		btn := dom.CreateElement("a").SetClassName("material-icons mdc-top-app-bar__action-item mdc-top-app-bar__navigation-icon").SetText(string(t.navigationIcon))
+		btn := dom.CreateElement("a").SetClassName("material-icons mdc-icon-button mdc-top-app-bar__action-item mdc-top-app-bar__navigation-icon").SetText(string(t.navigationIcon))
 		t.parent.addResource(btn.AddEventListener("click", func(this js.Value, args []js.Value) interface{} {
 			if t.navigationAction != nil {
 				t.navigationAction(t.parent)
@@ -114,7 +117,7 @@ func (t *topAppBarStyleStandard) rebuild() {
 		t.right.AppendChild(btn)
 	}
 
-	t.fnd = js2.Attach(js2.TopAppBar, t.header)
+	//t.initFoundation()
 
 	//new mdc.topAppBar.MDCTopAppBar.attachTo(topAppBarElement);
 	/*js.Global().
@@ -124,7 +127,15 @@ func (t *topAppBarStyleStandard) rebuild() {
 	Get("attachTo").
 	New(t.header.Unwrap())*/
 
-	t.parent.addResource(t.fnd)
+	//t.parent.addResource(t.fnd)
+}
+
+func (t *topAppBarStyleStandard) initFoundation() {
+	t.fnd = js2.Attach(js2.TopAppBar, t.header)
+}
+
+func (t *topAppBarStyleStandard) releaseFoundation() {
+	t.fnd.Release()
 }
 
 func (t *topAppBarStyleStandard) setNavigationIcon(i icon.Icon, action func(v View)) {
