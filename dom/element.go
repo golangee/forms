@@ -73,3 +73,8 @@ func (s Element) SetText(v string) Element {
 	s.absNode.SetTextContent(v)
 	return s
 }
+
+func (s Element) SetHref(v string) Element {
+	s.absNode.Unwrap().Set("href", v)
+	return s
+}

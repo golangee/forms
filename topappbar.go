@@ -72,7 +72,7 @@ type topAppBarStyleStandard struct {
 //  </header>
 func newTopAppBarStyleStandard(parent *TopAppBar) *topAppBarStyleStandard {
 	t := &topAppBarStyleStandard{parent: parent}
-	t.header = t.parent.node().SetClassName("mdc-top-app-bar mdc-top-app-bar--fixed material-icons")
+	t.header = t.parent.node().SetClassName("mdc-top-app-bar") // mdc-top-app-bar--fixed
 	t.row = dom.CreateElement("div").AddClass("mdc-top-app-bar__row")
 	t.header.AppendChild(t.row)
 	t.left = dom.CreateElement("section").SetClassName("mdc-top-app-bar__section mdc-top-app-bar__section--align-start")
@@ -88,7 +88,7 @@ func (t *topAppBarStyleStandard) rebuild() {
 	t.fnd.Release()
 	t.left.SetTextContent("")
 	if len(t.navigationIcon) > 0 {
-		btn := dom.CreateElement("button").SetClassName("mdc-icon-button material-icons mdc-top-app-bar__action-item").SetText(string(t.navigationIcon))
+		btn := dom.CreateElement("a").SetHref("#").SetClassName("material-icons mdc-top-app-bar__action-item mdc-top-app-bar__navigation-icon").SetText(string(t.navigationIcon))
 		t.parent.addResource(btn.AddEventListener("click", func(this js.Value, args []js.Value) interface{} {
 			if t.navigationAction != nil {
 				t.navigationAction(t.parent)
