@@ -3,6 +3,8 @@ package wtk
 import (
 	"github.com/worldiety/wtk/dom"
 	"github.com/worldiety/wtk/event"
+	"log"
+	"reflect"
 	"syscall/js"
 )
 
@@ -102,6 +104,7 @@ func (b *absComponent) addEventListener(t event.Type, f func(v View)) {
 
 func (b *absComponent) Context() Context {
 	if b.parent() == nil {
+		log.Println("here is " + reflect.TypeOf(b.this).String() + " and i'm not attached")
 		return nil
 	}
 	return b.parent().Context()

@@ -28,12 +28,15 @@ func (w Window) Document() Document {
 	return Document{v, absNode{v}}
 }
 
-
 func (w Window) Location() Location {
 	return Location{w.val.Get("location")}
 }
 func (w Window) Unwrap() js.Value {
 	return w.val
+}
+
+func (w Window) MatchesMedia(criteria string) bool {
+	return w.val.Call("matchMedia", criteria).Get("matches").Bool()
 }
 
 func CreateElement(name string) Element {

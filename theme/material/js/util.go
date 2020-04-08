@@ -14,6 +14,8 @@ const Dialog MDCName = "dialog"
 const Menu MDCName = "menu"
 const MenuSurface MDCName = "menuSurface"
 const TopAppBar MDCName = "topAppBar"
+const Drawer MDCName = "drawer"
+const List MDCName = "list"
 
 type Foundation struct {
 	val js.Value

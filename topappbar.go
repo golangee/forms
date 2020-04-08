@@ -88,7 +88,7 @@ func (t *topAppBarStyleStandard) rebuild() {
 	t.fnd.Release()
 	t.left.SetTextContent("")
 	if len(t.navigationIcon) > 0 {
-		btn := dom.CreateElement("a").SetHref("#").SetClassName("material-icons mdc-top-app-bar__action-item mdc-top-app-bar__navigation-icon").SetText(string(t.navigationIcon))
+		btn := dom.CreateElement("a").SetClassName("material-icons mdc-top-app-bar__action-item mdc-top-app-bar__navigation-icon").SetText(string(t.navigationIcon))
 		t.parent.addResource(btn.AddEventListener("click", func(this js.Value, args []js.Value) interface{} {
 			if t.navigationAction != nil {
 				t.navigationAction(t.parent)

@@ -71,6 +71,7 @@ func (w *Window) RemoveView(v View) {
 	//w.node().RemoveChild(v.node()) currently the child calls it at the parents node, seems like a bad separation
 }
 
+
 func Run(target View, init func()) {
 	defer func() {
 		if r := recover(); r != nil {
