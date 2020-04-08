@@ -42,6 +42,12 @@ func NewDialog() *Dialog {
 	return t
 }
 
+func ShowMessage(parent View, msg string) {
+	NewDialog().SetBody(NewText(msg)).AddAction("Ok", func(dlg *Dialog) {
+		dlg.Close()
+	}).Show(parent)
+}
+
 func (t *Dialog) Show(parent View) {
 	wnd := getWindow(parent)
 	if wnd == nil {

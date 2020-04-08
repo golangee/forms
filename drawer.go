@@ -45,6 +45,10 @@ func NewDrawer(bar *TopAppBar, content View) *Drawer {
 	t.node().AppendChild(drawerCnt)
 
 	t.drawer = dom.CreateElement("aside").SetClassName("wtk-drawer mdc-drawer")
+	drawerHeader := dom.CreateElement("div").SetClassName("mdc-drawer__header")
+	drawerHeader.SetInnerHTML(`<h3 class="mdc-drawer__title">Mail</h3>
+    <h6 class="mdc-drawer__subtitle">email@material.io</h6>`)
+
 	drawerContent := dom.CreateElement("div").SetClassName("mdc-drawer__content")
 	t.navList = dom.CreateElement("nav").SetClassName("mdc-list")
 	t.navList.SetInnerHTML(`<a class="mdc-list-item mdc-list-item--selected" href="#" aria-selected="true" tabindex="0">
@@ -55,11 +59,14 @@ func NewDrawer(bar *TopAppBar, content View) *Drawer {
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">send</i>
             <span class="mdc-list-item__text">Outgoing</span>
           </a>
+ <hr class="mdc-list-divider">
+      <h6 class="mdc-list-group__subheader">Labels</h6>
           <a class="mdc-list-item" href="#">
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">drafts</i>
             <span class="mdc-list-item__text">Drafts</span>
           </a>`)
 	drawerContent.AppendChild(t.navList)
+	t.drawer.AppendChild(drawerHeader)
 	t.drawer.AppendChild(drawerContent)
 
 	t.node().AppendChild(t.drawer)

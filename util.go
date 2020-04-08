@@ -1,6 +1,10 @@
 package wtk
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+	"syscall/js"
+)
 
 var htmlId = 1
 
@@ -35,4 +39,16 @@ func getWindow(view View) *Window {
 		return w
 	}
 	return getWindow(view.parent())
+}
+
+func debugStr(value js.Value) string {
+	sb := &strings.Builder{}
+	sb.WriteString(value.Type().String())
+	sb.WriteString(":")
+	keys := js.Global().Get("Object").Call("keys", value)
+	for i := 0; i < keys.Length(); i++ {
+		sb.WriteString(keys.Index(i).String())
+		sb.WriteString(",")
+	}
+	return sb.String()
 }
