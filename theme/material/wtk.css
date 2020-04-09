@@ -52,14 +52,14 @@
     font-family: 'Roboto';
     font-style: italic;
     font-weight: 500;
-    src: url(/material/Roboto-RegularItalic.ttf) format('truetype');
+    src: url(/material/Roboto-MediumItalic.ttf) format('truetype');
 }
 
 @font-face {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
-    src: url(/material/Roboto-Regular.ttf) format('truetype');
+    src: url(/material/Roboto-Medium.ttf) format('truetype');
 }
 
 @font-face {
@@ -130,6 +130,7 @@
     font-weight: 300;
     border: 1px solid rgba(0, 0, 0, .1);
     overflow-x: scroll;
+    width: initial;
 }
 
 .wtk-code-blue {
@@ -269,6 +270,10 @@ body {
     .wtk-drawer.mdc-drawer {
         margin-top: 0;
     }
+
+    .wtk-code{
+        width: 80vw;
+    }
 }
 
 :root {
@@ -277,6 +282,7 @@ body {
 }
 
 /* avoid browsers to do what they want*/
+/*
 span {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
@@ -288,7 +294,7 @@ span {
     text-decoration: var(--mdc-typography-body1-text-decoration, inherit);
     text-transform: var(--mdc-typography-body1-text-transform, inherit);
 }
-
+*/
 
 .mdc-drawer .mdc-list-item--activated {
     color: var(--wtk-primary-alpha, rgba(98, 0, 238, .87))

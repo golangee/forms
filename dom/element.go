@@ -41,6 +41,11 @@ func (s Element) SetRole(r string) Element {
 	return s
 }
 
+func (s Element) SetScope(r string) Element {
+	s.val.Set("scope", r)
+	return s
+}
+
 func (s Element) SetAriaHidden(b bool) Element {
 	s.val.Set("aria-hidden", b)
 	return s
