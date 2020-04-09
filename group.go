@@ -4,9 +4,10 @@ type Group struct {
 	*absComponent
 }
 
-func NewGroup() *Group {
+func NewGroup(views ...View) *Group {
 	t := &Group{}
 	t.absComponent = newComponent(t, "div")
+	t.AddViews(views...)
 	return t
 }
 

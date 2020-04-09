@@ -2,7 +2,6 @@ package wtk
 
 import (
 	"github.com/worldiety/wtk/dom"
-	"github.com/worldiety/wtk/theme/material/icon"
 	js2 "github.com/worldiety/wtk/theme/material/js"
 	"syscall/js"
 )
@@ -62,12 +61,16 @@ func (t *List) SetSelectedIndex(idx int) *List {
 
 func (t *List) AddItems(items ...LstItem) *List {
 	anySelected := false
+	isTwoLine := false
 	for _, item := range items {
 		if t.selectionList {
 			item.node().SetRole("option")
 		}
 		if item.isSelected() {
 			anySelected = true
+		}
+		if item.isTwoLine() {
+			isTwoLine = true
 		}
 		t.addView(item)
 		t.addResource(js2.Attach(js2.Ripple, item.node()))
@@ -80,6 +83,10 @@ func (t *List) AddItems(items ...LstItem) *List {
 				item.node().Unwrap().Set("tabIndex", 0)
 			}
 		}
+	}
+	t.node().RemoveClass("mdc-list--two-line")
+	if isTwoLine {
+		t.node().AddClass("mdc-list--two-line")
 	}
 
 	return t
@@ -99,6 +106,7 @@ func (t *List) Self(ref **List) *List {
 type LstItem interface {
 	myListItem()
 	isSelected() bool
+	isTwoLine() bool
 	View
 }
 
@@ -117,6 +125,10 @@ func (t *ListSeparator) myListItem() {
 }
 
 func (t *ListSeparator) isSelected() bool {
+	return false
+}
+
+func (t *ListSeparator) isTwoLine() bool {
 	return false
 }
 
@@ -144,12 +156,17 @@ func (t *ListHeader) isSelected() bool {
 	return false
 }
 
+func (t *ListHeader) isTwoLine() bool {
+	return false
+}
+
 type ListItem struct {
 	*absComponent
 	span     dom.Element
-	ico      dom.Element
+	leading  dom.Element
 	trailing dom.Element
 	selected bool
+	twoLine  bool
 }
 
 func (t *ListItem) myListItem() {
@@ -161,29 +178,24 @@ func NewListItem(text string) *ListItem {
 	t.node().AddClass("mdc-list-item")
 	t.node().Unwrap().Set("tabIndex", 0)
 	t.span = dom.CreateElement("span").AddClass("mdc-list-item__text").SetText(text)
-	t.ico = dom.CreateElement("i").SetClassName("material-icons mdc-list-item__graphic")
-	t.ico.Style().Set("display", "none")
+	t.leading = dom.CreateElement("div").SetClassName("mdc-list-item__graphic")
+	t.leading.Style().Set("display", "none")
 	t.trailing = dom.CreateElement("div").AddClass("mdc-list-item__meta")
 	t.trailing.Style().Set("display", "none")
-	t.node().AppendChild(t.ico)
+	t.node().AppendChild(t.leading)
 	t.node().AppendChild(t.span)
 	t.node().AppendChild(t.trailing)
 
 	return t
 }
 
-func (t *ListItem) SetText(s string) *ListItem {
-	t.span.SetText(s)
-	return t
-}
-
-func (t *ListItem) SetIcon(ico icon.Icon) *ListItem {
-	if len(ico) > 0 {
-		t.ico.Style().Set("display", "inherit")
-	} else {
-		t.ico.Style().Set("display", "none")
-	}
-	t.ico.SetText(string(ico))
+func NewListTwoLineItem(primary string, secondary string) *ListItem {
+	t := NewListItem("")
+	p := dom.CreateElement("span").AddClass("mdc-list-item__primary-text").SetText(primary)
+	s := dom.CreateElement("span").AddClass("mdc-list-item__secondary-text").SetText(secondary)
+	t.span.AppendChild(p)
+	t.span.AppendChild(s)
+	t.twoLine = true
 	return t
 }
 
@@ -219,6 +231,24 @@ func (t *ListItem) SetTrailingView(v View) *ListItem {
 	return t
 }
 
+func (t *ListItem) SetLeadingView(v View) *ListItem {
+	if v != nil {
+		t.leading.Style().Set("display", "inherit")
+	} else {
+		t.leading.Style().Set("display", "none")
+		return t
+	}
+	v.attach(t)
+	t.addResource(v) // todo: this should be done by attach?
+	t.leading.SetText("")
+	t.leading.AppendChild(v.node())
+	return t
+}
+
 func (t *ListItem) isSelected() bool {
 	return t.selected
+}
+
+func (t *ListItem) isTwoLine() bool {
+	return t.twoLine
 }
