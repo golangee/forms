@@ -20,6 +20,8 @@ const Subtitle2 FontStyle = "mdc-typography--subtitle1"
 const Caption FontStyle = "mdc-typography--caption"
 const Btn FontStyle = "mdc-typography--button"
 const Overline FontStyle = "mdc-typography--overline"
+const DrawerTitle FontStyle = "mdc-drawer__title"
+const DrawerSubTitle FontStyle = "mdc-drawer__subtitle"
 
 var DefaultPadding = 8.0
 

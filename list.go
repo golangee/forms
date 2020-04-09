@@ -60,14 +60,28 @@ func (t *List) SetSelectedIndex(idx int) *List {
 	return t
 }
 
-func (t *List) AddItems(items ...LItem) *List {
+func (t *List) AddItems(items ...LstItem) *List {
+	anySelected := false
 	for _, item := range items {
 		if t.selectionList {
 			item.node().SetRole("option")
 		}
+		if item.isSelected() {
+			anySelected = true
+		}
 		t.addView(item)
 		t.addResource(js2.Attach(js2.Ripple, item.node()))
 	}
+	// a quickfix to reset tabindex to the selected
+	if anySelected {
+		for _, item := range items {
+			item.node().Unwrap().Set("tabIndex", -1)
+			if item.isSelected() {
+				item.node().Unwrap().Set("tabIndex", 0)
+			}
+		}
+	}
+
 	return t
 }
 
@@ -82,8 +96,9 @@ func (t *List) Self(ref **List) *List {
 	return t
 }
 
-type LItem interface {
+type LstItem interface {
 	myListItem()
+	isSelected() bool
 	View
 }
 
@@ -99,6 +114,10 @@ func NewListSeparator() *ListSeparator {
 }
 
 func (t *ListSeparator) myListItem() {
+}
+
+func (t *ListSeparator) isSelected() bool {
+	return false
 }
 
 type ListHeader struct {
@@ -121,11 +140,16 @@ func (t *ListHeader) SetText(s string) *ListHeader {
 func (t *ListHeader) myListItem() {
 }
 
+func (t *ListHeader) isSelected() bool {
+	return false
+}
+
 type ListItem struct {
 	*absComponent
 	span     dom.Element
 	ico      dom.Element
 	trailing dom.Element
+	selected bool
 }
 
 func (t *ListItem) myListItem() {
@@ -135,6 +159,7 @@ func NewListItem(text string) *ListItem {
 	t := &ListItem{}
 	t.absComponent = newComponent(t, "a")
 	t.node().AddClass("mdc-list-item")
+	t.node().Unwrap().Set("tabIndex", 0)
 	t.span = dom.CreateElement("span").AddClass("mdc-list-item__text").SetText(text)
 	t.ico = dom.CreateElement("i").SetClassName("material-icons mdc-list-item__graphic")
 	t.ico.Style().Set("display", "none")
@@ -163,6 +188,7 @@ func (t *ListItem) SetIcon(ico icon.Icon) *ListItem {
 }
 
 func (t *ListItem) SetSelected(b bool) *ListItem {
+	t.selected = b
 	if b {
 		t.node().AddClass("mdc-list-item--selected")
 	} else {
@@ -191,4 +217,8 @@ func (t *ListItem) SetTrailingView(v View) *ListItem {
 	t.trailing.SetText("")
 	t.trailing.AppendChild(v.node())
 	return t
+}
+
+func (t *ListItem) isSelected() bool {
+	return t.selected
 }

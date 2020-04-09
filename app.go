@@ -2,6 +2,8 @@ package wtk
 
 import "github.com/worldiety/wtk/dom"
 
+
+
 type AbsApplication interface {
 	SetView(view View)
 }

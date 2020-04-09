@@ -14,6 +14,7 @@ type NamedParameter struct {
 type Context interface {
 	router() *Router
 	Navigate(path string, params ...NamedParameter)
+	Routes() []Route
 }
 
 func IntParam(key string, val int) NamedParameter {
@@ -53,6 +54,10 @@ func (c *myContext) Navigate(path string, params ...NamedParameter) {
 		panic(err)
 	}
 	c.router().Navigate(u)
+}
+
+func (c *myContext) Routes() []Route {
+	return c.r.Routes()
 }
 
 func (c *myContext) router() *Router {

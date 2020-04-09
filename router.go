@@ -4,6 +4,7 @@ import (
 	"github.com/worldiety/wtk/dom"
 	"log"
 	"net/url"
+	"sort"
 	"strconv"
 	"syscall/js"
 )
@@ -24,6 +25,11 @@ func (p Query) Str(key string) string {
 func (p Query) Int(key string) int {
 	i, _ := strconv.ParseInt(p.Str(key), 10, 64)
 	return int(i)
+}
+
+type Route struct {
+	Path        string
+	Constructor func(q Query)
 }
 
 type Router struct {
@@ -51,6 +57,20 @@ func NewRouter() *Router {
 	r.lastLocation = "$%&/"
 	r.lastFragment = r.lastLocation
 	return r
+}
+
+func (r *Router) Routes() []Route {
+	var res []Route
+	for k, v := range r.routes2Actions {
+		res = append(res, Route{
+			Path:        k,
+			Constructor: v,
+		})
+	}
+	sort.Slice(res, func(i, j int) bool {
+		return res[i].Path < res[j].Path
+	})
+	return res
 }
 
 func (r *Router) AddRoute(path string, f func(Query)) *Router {
