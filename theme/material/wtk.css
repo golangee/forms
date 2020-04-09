@@ -288,3 +288,16 @@ span {
     text-decoration: var(--mdc-typography-body1-text-decoration, inherit);
     text-transform: var(--mdc-typography-body1-text-transform, inherit);
 }
+
+
+.mdc-drawer .mdc-list-item--activated {
+    color: var(--wtk-primary-alpha, rgba(98, 0, 238, .87))
+}
+
+.mdc-select:not(.mdc-select--disabled).mdc-select--focused .mdc-floating-label {
+    color: var(--wtk-primary-alpha, rgba(98, 0, 238, .87))
+}
+
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+    color: var(--wtk-primary-alpha, rgba(98, 0, 238, .87))
+}

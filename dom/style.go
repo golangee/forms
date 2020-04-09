@@ -45,3 +45,7 @@ func (s Style) Unwrap() js.Value {
 func (s Style) Set(k, v string) {
 	s.val.Set(k, v)
 }
+
+func (s Style) SetProperty(k, v string) {
+	s.val.Call("setProperty", k, v)
+}

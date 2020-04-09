@@ -29,3 +29,8 @@ func (d Document) Body() Element {
 	body := d.val.Get("body")
 	return Element{body, absNode{body}, absEventTarget{body}}
 }
+
+func (d Document) DocumentElement() Element {
+	body := d.val.Get("documentElement")
+	return Element{body, absNode{body}, absEventTarget{body}}
+}
