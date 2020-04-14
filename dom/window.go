@@ -42,3 +42,7 @@ func (w Window) MatchesMedia(criteria string) bool {
 func CreateElement(name string) Element {
 	return GetWindow().Document().CreateElement(name)
 }
+
+func CreateElementNS(ns string, name string) Element {
+	return GetWindow().Document().CreateElementNS(ns, name)
+}

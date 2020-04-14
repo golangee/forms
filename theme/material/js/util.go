@@ -17,6 +17,8 @@ const TopAppBar MDCName = "topAppBar"
 const Drawer MDCName = "drawer"
 const List MDCName = "list"
 const DataTable MDCName = "dataTable"
+const Checkbox MDCName = "checkbox"
+const FormField MDCName = "formField"
 
 type Foundation struct {
 	val js.Value

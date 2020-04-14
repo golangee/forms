@@ -25,6 +25,12 @@ func (d Document) CreateElement(name string) Element {
 	return Element{v, absNode{v}, absEventTarget{v}}
 }
 
+// In an HTML document, the document.createElement() method creates the HTML element specified by tagName, or an HTMLUnknownElement if tagName isn't recognized.
+func (d Document) CreateElementNS(ns string, name string) Element {
+	v := d.val.Call("createElementNS", ns, name)
+	return Element{v, absNode{v}, absEventTarget{v}}
+}
+
 func (d Document) Body() Element {
 	body := d.val.Get("body")
 	return Element{body, absNode{body}, absEventTarget{body}}

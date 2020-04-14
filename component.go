@@ -66,6 +66,14 @@ func (b *absComponent) removeView(child View) {
 	}
 }
 
+func (b *absComponent) removeAll() {
+	for _, view := range b.children {
+		view.detach()
+	}
+	b.children = nil
+	b.elem.SetTextContent("")
+}
+
 func (b *absComponent) removeViewAt(i int) View {
 	a := b.children
 	child := a[i]
