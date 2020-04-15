@@ -6,8 +6,9 @@ type ThemeController struct {
 	root dom.Element
 }
 
-func (t ThemeController) SetPrimaryColor(color Color) {
+func (t ThemeController) SetColor(color Color) {
 	t.root.Style().SetProperty("--mdc-theme-primary", color.String())
+	t.root.Style().SetProperty("--mdc-theme-secondary", color.String())
 	t.root.Style().SetProperty("--wtk-primary-alpha", color.SetAlpha(222).String())
 }
 

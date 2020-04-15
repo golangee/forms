@@ -271,7 +271,7 @@ body {
         margin-top: 0;
     }
 
-    .wtk-code{
+    .wtk-code {
         width: 80vw;
     }
 }
@@ -296,14 +296,25 @@ span {
 }
 */
 
+/* fix hardcoded color */
 .mdc-drawer .mdc-list-item--activated {
-    color: var(--wtk-primary-alpha, rgba(98, 0, 238, .87))
+    color: var(--wtk-primary-alpha, rgba(98, 0, 238, .87));
 }
 
+/* fix hardcoded color */
 .mdc-select:not(.mdc-select--disabled).mdc-select--focused .mdc-floating-label {
-    color: var(--wtk-primary-alpha, rgba(98, 0, 238, .87))
+    color: var(--wtk-primary-alpha, rgba(98, 0, 238, .87));
 }
 
+/* fix hardcoded color */
 .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
-    color: var(--wtk-primary-alpha, rgba(98, 0, 238, .87))
+    color: var(--wtk-primary-alpha, rgba(98, 0, 238, .87));
+}
+
+
+/* fix hardcoded color using masks, because embedded svg cannot be styled by css rules */
+.mdc-select--focused .mdc-select__dropdown-icon {
+    background: var(--mdc-theme-primary, #6200EE);
+    mask: url('data:image/svg+xml;charset=UTF-8,<svg width="10px" height="5px" viewBox="0 0 10 5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"> <path id="Shape" d="M0,0L5,5L10,0L0,0Z" style="fill:black"/> </svg>') no-repeat center;
+    -webkit-mask: url('data:image/svg+xml;charset=UTF-8,<svg width="10px" height="5px" viewBox="0 0 10 5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"> <path id="Shape" d="M0,0L5,5L10,0L0,0Z" style="fill:black"/> </svg>') no-repeat center;
 }
