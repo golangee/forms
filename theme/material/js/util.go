@@ -20,6 +20,8 @@ const DataTable MDCName = "dataTable"
 const Checkbox MDCName = "checkbox"
 const FormField MDCName = "formField"
 const Select MDCName = "select"
+const TabBar MDCName = "tabBar"
+const TabScroller MDCName = "tabScroller"
 
 type Foundation struct {
 	val js.Value

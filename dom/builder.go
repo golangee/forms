@@ -77,6 +77,12 @@ func AriaLabelledby(label string) Modifier {
 	})
 }
 
+func TextContent(r string) Modifier {
+	return funcMod(func(e Element) {
+		e.SetTextContent(r)
+	})
+}
+
 func Role(r string) Modifier {
 	return funcMod(func(e Element) {
 		e.SetRole(r)

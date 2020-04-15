@@ -20,6 +20,10 @@ func (n absNode) SetTextContent(v string) {
 	n.val.Set("textContent", v)
 }
 
+func (n absNode) Clear() {
+	n.SetTextContent("")
+}
+
 // The Element property innerHTML gets or sets the HTML or XML markup contained within the element.
 //
 //Note: If a <div>, <span>, or <noembed> node has a child text node that includes the characters (&), (<), or (>), innerHTML returns these characters as the HTML entities "&amp;", "&lt;" and "&gt;" respectively. Use Node.textContent to get a raw copy of these text nodes' contents.
