@@ -11,6 +11,7 @@ type Picker struct {
 	*absComponent
 	menu           h.Element
 	label          h.Element
+	helper         h.Element
 	fnd            js2.Foundation
 	selectListener func(v *Picker)
 }
@@ -21,28 +22,44 @@ func NewPicker() *Picker {
 	t.node().SetClassName("mdc-select mdc-select--outlined")
 
 	labelId := nextId()
-	anchor := h.Div(h.Class("mdc-select__anchor"),
-		h.I(h.Class("mdc-select__dropdown-icon")),
-		h.Div(h.Class("mdc-select__selected-text"), h.AriaLabelledby(labelId)),
-		h.Div(h.Class("mdc-notched-outline"),
-			h.Div(h.Class("mdc-notched-outline__leading")),
-			h.Div(h.Class("mdc-notched-outline__notch"),
-				h.Span(h.Id(labelId), h.Class("mdc-floating-label")).Self(&t.label),
+	h.Wrap(t.node(),
+		h.Div(h.Class("mdc-select__anchor"),
+			h.I(h.Class("mdc-select__dropdown-icon")),
+			h.Div(h.Class("mdc-select__selected-text"), h.AriaLabelledby(labelId), h.Id(nextId())),
+			h.Div(h.Class("mdc-notched-outline"),
+				h.Div(h.Class("mdc-notched-outline__leading")),
+				h.Div(h.Class("mdc-notched-outline__notch"),
+					h.Span(h.Id(labelId), h.Class("mdc-floating-label")).Self(&t.label),
+				),
+				h.Div(h.Class("mdc-notched-outline__trailing")),
 			),
-			h.Div(h.Class("mdc-notched-outline__trailing")),
 		),
-	).Build()
+		h.Div(h.Class("mdc-select__menu", "mdc-menu", "mdc-menu-surface"), h.Role("listbox")).Self(&t.menu),
+		h.Div(h.Class("mdc-text-field-helper-line"),
+			h.P(h.Class("mdc-text-field-helper-text", "mdc-text-field-helper-text--persistent", "mdc-text-field-helper-text--validation-msg")).Self(&t.helper),
+		),
+	)
 
-	t.node().AppendChild(anchor)
-
-	t.menu = h.CreateElement("div").SetClassName("mdc-select__menu mdc-menu mdc-menu-surface").SetRole("listbox")
-	t.node().AppendChild(t.menu)
 	t.fnd = js2.Attach(js2.Select, t.node())
 	return t
 }
 
-func (t *Picker) SetCaption(str string) *Picker {
+func (t *Picker) SetLabel(str string) *Picker {
 	t.label.SetTextContent(str)
+	return t
+}
+
+func (t *Picker) SetHelper(str string) *Picker {
+	t.helper.SetTextContent(str)
+	return t
+}
+
+func (t *Picker) SetInvalid(b bool) *Picker {
+	if b {
+		t.node().AddClass("mdc-text-field--invalid")
+	} else {
+		t.node().RemoveClass("mdc-text-field--invalid")
+	}
 	return t
 }
 

@@ -20,8 +20,8 @@ func (f ChildHolder) Self(e *Element) ChildHolder {
 	return f
 }
 
-func (f ChildHolder) Build() Element {
-	f.f(CreateElement("div"))
+func (f ChildHolder) Build(e Element) Element {
+	f.f(e)
 	return f.Element
 }
 
@@ -29,9 +29,12 @@ func (f ChildHolder) Apply(e Element) {
 	f.f(e)
 }
 
-func Class(s string) Modifier {
+func Class(c ...string) Modifier {
 	return funcMod(func(e Element) {
-		e.AddClass(s)
+		for _, s := range c {
+			e.AddClass(s)
+		}
+
 	})
 }
 func Elem(name string, mods ...Modifier) ChildHolder {
@@ -47,8 +50,18 @@ func Elem(name string, mods ...Modifier) ChildHolder {
 	}
 }
 
+func Wrap(elem Element, mods ...Modifier) {
+	for _, m := range mods {
+		m.Apply(elem)
+	}
+}
+
 func Div(mods ...Modifier) ChildHolder {
 	return Elem("div", mods...)
+}
+
+func P(mods ...Modifier) ChildHolder {
+	return Elem("p", mods...)
 }
 func Span(mods ...Modifier) ChildHolder {
 	return Elem("div", mods...)
@@ -61,6 +74,12 @@ func I(mods ...Modifier) ChildHolder {
 func AriaLabelledby(label string) Modifier {
 	return funcMod(func(e Element) {
 		e.SetAttr("aria-labelledby", label)
+	})
+}
+
+func Role(r string) Modifier {
+	return funcMod(func(e Element) {
+		e.SetRole(r)
 	})
 }
 

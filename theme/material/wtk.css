@@ -318,3 +318,13 @@ span {
     mask: url('data:image/svg+xml;charset=UTF-8,<svg width="10px" height="5px" viewBox="0 0 10 5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"> <path id="Shape" d="M0,0L5,5L10,0L0,0Z" style="fill:black"/> </svg>') no-repeat center;
     -webkit-mask: url('data:image/svg+xml;charset=UTF-8,<svg width="10px" height="5px" viewBox="0 0 10 5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"> <path id="Shape" d="M0,0L5,5L10,0L0,0Z" style="fill:black"/> </svg>') no-repeat center;
 }
+
+/* helper line not available for select */
+.mdc-select .mdc-text-field-helper-line{
+    padding-left: 16px;
+    color: rgba(0,0,0,.6);
+}
+
+.mdc-text-field--invalid .mdc-text-field-helper-line{
+    color: var(--mdc-theme-error, #b00020);
+}
