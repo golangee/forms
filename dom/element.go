@@ -45,7 +45,7 @@ func (s Element) SetId(id string) Element {
 }
 
 func (s Element) SetRole(r string) Element {
-	s.val.Set("role", r)
+	s.SetAttr("role", r)
 	return s
 }
 

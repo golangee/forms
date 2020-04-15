@@ -22,6 +22,7 @@ const FormField MDCName = "formField"
 const Select MDCName = "select"
 const TabBar MDCName = "tabBar"
 const TabScroller MDCName = "tabScroller"
+const LinearProgress MDCName = "linearProgress"
 
 type Foundation struct {
 	val js.Value
