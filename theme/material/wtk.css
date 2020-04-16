@@ -325,6 +325,42 @@ span {
     color: rgba(0,0,0,.6);
 }
 
+/* helper line not available for select */
 .mdc-text-field--invalid .mdc-text-field-helper-line{
     color: var(--mdc-theme-error, #b00020);
+}
+
+
+/* circular progress not available */
+@keyframes wtk-rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@keyframes wtk-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124;
+    }
+}
+.wtk-mdc-circular-progress {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    animation: wtk-rotate 2s linear infinite;
+}
+.wtk-mdc-circular-progress__path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    animation: wtk-dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: round;
+    stroke: var(--mdc-theme-primary, #6200EE);
 }

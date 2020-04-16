@@ -34,11 +34,62 @@ func Class(c ...string) Modifier {
 		for _, s := range c {
 			e.AddClass(s)
 		}
-
 	})
 }
+
+func ViewBox(v string) Modifier {
+	return funcMod(func(e Element) {
+		e.SetAttr("viewBox", v)
+	})
+}
+
+func Cx(v string) Modifier {
+	return funcMod(func(e Element) {
+		e.SetAttr("cx", v)
+	})
+}
+
+func Cy(v string) Modifier {
+	return funcMod(func(e Element) {
+		e.SetAttr("cy", v)
+	})
+}
+
+func R(v string) Modifier {
+	return funcMod(func(e Element) {
+		e.SetAttr("r", v)
+	})
+}
+
+func Fill(v string) Modifier {
+	return funcMod(func(e Element) {
+		e.SetAttr("fill", v)
+	})
+}
+
+func StrokeWidth(v string) Modifier {
+	return funcMod(func(e Element) {
+		e.SetAttr("stroke-width", v)
+	})
+}
+
+func StrokeMiterlimit(v string) Modifier {
+	return funcMod(func(e Element) {
+		e.SetAttr("stroke-miterlimit", v)
+	})
+}
+
 func Elem(name string, mods ...Modifier) ChildHolder {
-	elem := CreateElement(name)
+	var elem Element
+	switch name {
+	case "svg":
+		elem = CreateElementNS("http://www.w3.org/2000/svg", "svg")
+	case "circle":
+		elem = CreateElementNS("http://www.w3.org/2000/svg", "circle")
+	default:
+		elem = CreateElement(name)
+	}
+
 	return ChildHolder{
 		Element: elem,
 		f: func(e Element) {
@@ -58,6 +109,13 @@ func Wrap(elem Element, mods ...Modifier) {
 
 func Div(mods ...Modifier) ChildHolder {
 	return Elem("div", mods...)
+}
+
+func Svg(mods ...Modifier) ChildHolder {
+	return Elem("svg", mods...)
+}
+func Circle(mods ...Modifier) ChildHolder {
+	return Elem("circle", mods...)
 }
 
 func P(mods ...Modifier) ChildHolder {
