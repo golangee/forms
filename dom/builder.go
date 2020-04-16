@@ -43,6 +43,13 @@ func ViewBox(v string) Modifier {
 	})
 }
 
+func Type(v string) Modifier {
+	return funcMod(func(e Element) {
+		e.SetAttr("type", v)
+	})
+}
+
+
 func Cx(v string) Modifier {
 	return funcMod(func(e Element) {
 		e.SetAttr("cx", v)
@@ -109,6 +116,10 @@ func Wrap(elem Element, mods ...Modifier) {
 
 func Div(mods ...Modifier) ChildHolder {
 	return Elem("div", mods...)
+}
+
+func Button(mods ...Modifier) ChildHolder {
+	return Elem("button", mods...)
 }
 
 func Svg(mods ...Modifier) ChildHolder {

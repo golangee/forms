@@ -23,6 +23,7 @@ const Select MDCName = "select"
 const TabBar MDCName = "tabBar"
 const TabScroller MDCName = "tabScroller"
 const LinearProgress MDCName = "linearProgress"
+const Snackbar MDCName = "snackbar"
 
 type Foundation struct {
 	val js.Value
