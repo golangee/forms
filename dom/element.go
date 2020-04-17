@@ -102,7 +102,7 @@ func (s Element) SetAttrNS(ns string, key, val string) Element {
 	return s
 }
 
-func (s Element) SetAttr(key, val string) Element {
+func (s Element) SetAttr(key, val interface{}) Element {
 	s.absNode.Unwrap().Call("setAttribute", key, val)
 	return s
 }

@@ -320,13 +320,17 @@ span {
 }
 
 /* helper line not available for select */
-.mdc-select .mdc-text-field-helper-line{
+.mdc-select .mdc-text-field-helper-line {
     padding-left: 16px;
-    color: rgba(0,0,0,.6);
+    color: rgba(0, 0, 0, .6);
 }
 
 /* helper line not available for select */
-.mdc-text-field--invalid .mdc-text-field-helper-line{
+.mdc-text-field--invalid .mdc-text-field-helper-line {
+    color: var(--mdc-theme-error, #b00020);
+}
+
+.mdc-text-field--invalid:not(.mdc-text-field--disabled).mdc-text-field--invalid+.mdc-text-field-helper-line .mdc-text-field-helper-text--validation-msg {
     color: var(--mdc-theme-error, #b00020);
 }
 
@@ -337,6 +341,7 @@ span {
         transform: rotate(360deg);
     }
 }
+
 @keyframes wtk-dash {
     0% {
         stroke-dasharray: 1, 200;
@@ -351,12 +356,14 @@ span {
         stroke-dashoffset: -124;
     }
 }
+
 .wtk-mdc-circular-progress {
     position: relative;
     width: 48px;
     height: 48px;
     animation: wtk-rotate 2s linear infinite;
 }
+
 .wtk-mdc-circular-progress__path {
     stroke-dasharray: 1, 200;
     stroke-dashoffset: 0;

@@ -118,6 +118,10 @@ func Div(mods ...Modifier) ChildHolder {
 	return Elem("div", mods...)
 }
 
+func Input(mods ...Modifier) ChildHolder {
+	return Elem("input", mods...)
+}
+
 func Button(mods ...Modifier) ChildHolder {
 	return Elem("button", mods...)
 }

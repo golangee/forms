@@ -1,9 +1,9 @@
 package wtk
 
 import (
-	"github.com/worldiety/wtk/dom"
+	h "github.com/worldiety/wtk/dom"
 	"github.com/worldiety/wtk/theme/material/icon"
-	"github.com/worldiety/wtk/theme/material/js"
+	js2 "github.com/worldiety/wtk/theme/material/js"
 )
 
 type InputType string
@@ -25,39 +25,103 @@ const Week InputType = "week"
 
 type TextField struct {
 	*absComponent
-	layoutCtr textFieldLayoutController
+	label          h.Element
+	labelNotch     h.Element
+	helperLine     h.Element
+	helperText     h.Element
+	leadingIco     h.Element
+	trailingIco    h.Element
+	characterCount h.Element
+	mdcTextField   h.Element
+	input          h.Element
+	fndTF          js2.Foundation
 }
 
 func NewTextField() *TextField {
 	t := &TextField{}
 	t.absComponent = newComponent(t, "div")
-	t.layoutCtr = newTFFilled(t.node())
-	t.absComponent.addResource(t.layoutCtr)
+	labelId := nextId()
+	h.Wrap(t.node(), h.Class("text-field-container"),
+		h.Div(h.Class("mdc-text-field", "mdc-text-field--outlined"), h.Class("mdc-text-field--no-label"),
+			h.I(h.Class("material-icons", "mdc-text-field__icon")).Self(&t.leadingIco),
+			h.I(h.Class("material-icons", "mdc-text-field__icon")).Self(&t.trailingIco),
+			h.Input(h.Class("mdc-text-field__input"), h.Type("text"), h.AriaLabelledby(labelId)).Self(&t.input),
+			h.Div(h.Class("mdc-notched-outline"),
+				h.Div(h.Class("mdc-notched-outline__leading")),
+				h.Div(h.Class("mdc-notched-outline__notch"),
+					h.Span(h.Class("mdc-floating-label"), h.Id(labelId)).Self(&t.label),
+				).Self(&t.labelNotch),
+				h.Div(h.Class("mdc-notched-outline__trailing")),
+			),
+
+		).Self(&t.mdcTextField),
+		h.Div(h.Class("mdc-text-field-helper-line"),
+			h.Div(h.Class("mdc-text-field-helper-text", "mdc-text-field-helper-text--persistent", "mdc-text-field-helper-text--validation-msg")).Self(&t.helperText),
+
+			h.Div(h.Class()).Self(&t.characterCount),
+		).Self(&t.helperLine),
+	)
+	t.labelNotch.Style().Set("display", "none")
+	t.reinitFoundation()
 	return t
 }
 
+func (t *TextField) reinitFoundation() {
+	t.fndTF.Release()
+	t.fndTF = js2.Attach(js2.TextField, t.mdcTextField)
+	t.addResource(t.fndTF)
+}
+
 func (t *TextField) SetLeadingIcon(ico icon.Icon) *TextField {
-	t.layoutCtr.setLeadingIcon(ico)
+	t.mdcTextField.RemoveClass("mdc-text-field--with-leading-icon")
+	if len(ico) > 0 {
+		t.mdcTextField.AddClass("mdc-text-field--with-leading-icon")
+		t.leadingIco.Style().Set("display", "block")
+	} else {
+		t.leadingIco.Style().Set("display", "none")
+	}
+	t.leadingIco.SetText(string(ico))
 	return t
 }
 
 func (t *TextField) SetTrailingIcon(ico icon.Icon) *TextField {
-	t.layoutCtr.setTrailingIcon(ico)
+	t.mdcTextField.RemoveClass("mdc-text-field--with-trailing-icon")
+	if len(ico) > 0 {
+		t.mdcTextField.AddClass("mdc-text-field--with-trailing-icon")
+		t.trailingIco.Style().Set("display", "block")
+	} else {
+		t.trailingIco.Style().Set("display", "none")
+	}
+	t.trailingIco.SetText(string(ico))
 	return t
 }
 
 func (t *TextField) SetEnabled(b bool) *TextField {
-	t.layoutCtr.setEnabled(b)
+	t.input.SetDisabled(!b)
+	t.mdcTextField.RemoveClass("field--disabled")
+	if !b {
+		t.mdcTextField.AddClass("field--disabled")
+	}
+	t.reinitFoundation()
 	return t
 }
 
 func (t *TextField) SetText(str string) *TextField {
-	t.layoutCtr.setInput(str)
+	t.input.SetAttr("value", str)
+	t.reinitFoundation()
 	return t
 }
 
 func (t *TextField) SetLabel(str string) *TextField {
-	t.layoutCtr.setLabel(str)
+	t.mdcTextField.RemoveClass("mdc-text-field--no-label")
+	if len(str) == 0 {
+		t.mdcTextField.AddClass("mdc-text-field--no-label")
+		t.labelNotch.Style().Set("display", "none")
+	} else {
+		t.labelNotch.Style().Set("display", "block")
+	}
+	t.label.SetText(str)
+	t.reinitFoundation()
 	return t
 }
 
@@ -70,39 +134,50 @@ func (t *TextField) Style(style ...Style) *TextField {
 // Styles changes the
 func (t *TextField) InputStyle(styles ...Style) *TextField {
 	for _, s := range styles {
-		s.applyCSS(t.layoutCtr.mdcTextField())
+		s.applyCSS(t.mdcTextField)
+		_ = s
 	}
 	return t
 }
 
 func (t *TextField) SetInputType(in InputType) *TextField {
-	t.layoutCtr.inputField().Unwrap().Set("type", string(in))
+	t.input.SetAttr("type", string(in))
 	return t
 }
 
 func (t *TextField) SetRange(min, max int) *TextField {
 	t.SetInputType(Range)
-	t.layoutCtr.inputField().Unwrap().Set("min", min)
-	t.layoutCtr.inputField().Unwrap().Set("max", max)
+	t.input.SetAttr("min", min)
+	t.input.SetAttr("max", max)
 	return t
 }
 
 func (t *TextField) SetHelper(str string) *TextField {
-	t.layoutCtr.setHelper(str)
+	t.helperText.SetTextContent(str)
+	return t
+}
+
+func (t *TextField) SetHelperPersistent(b bool) *TextField {
+	t.helperText.RemoveClass("mdc-text-field-helper-text--persistent")
+	if b {
+		t.helperText.AddClass("mdc-text-field-helper-text--persistent")
+	}
 	return t
 }
 
 func (t *TextField) SetMaxLength(chars int) *TextField {
-	t.layoutCtr.setMaxLength(chars)
+	t.characterCount.SetClassName("mdc-text-field-character-counter")
+	t.input.SetAttr("maxLength", chars)
+	t.reinitFoundation()
 	return t
 }
 
 func (t *TextField) SetInvalid(b bool) *TextField {
-	if b {
-		t.layoutCtr.mdcTextField().AddClass("mdc-text-field--invalid")
-	} else {
-		t.layoutCtr.mdcTextField().RemoveClass("mdc-text-field--invalid")
-	}
+	t.SetHelperPersistent(b)
+	t.mdcTextField.AddClass("mdc-text-field--invalid")
+	t.fndTF.Unwrap().Set("useNativeValidation", false)
+	t.fndTF.Unwrap().Set("valid", !b)
+	//t.reinitFoundation()
 	return t
 }
 
@@ -114,168 +189,9 @@ func (t *TextField) Self(ref **TextField) *TextField {
 
 func (t *TextField) SetRequired(b bool) *TextField {
 	if b {
-		t.layoutCtr.inputField().Unwrap().Set("required", "required")
+		t.input.Unwrap().Set("required", "required")
 	} else {
-		t.layoutCtr.mdcTextField().Unwrap().Delete("required")
+		t.input.Unwrap().Delete("required")
 	}
 	return t
-}
-
-type textFieldLayoutController interface {
-	setInput(val string)
-	setLabel(val string)
-	setTrailingIcon(i icon.Icon)
-	setLeadingIcon(i icon.Icon)
-	setEnabled(b bool)
-	setHelper(str string)
-	setMaxLength(c int)
-	mdcTextField() dom.Element
-	inputField() dom.Element
-	Release()
-}
-
-//  <div class="mdc-text-field mdc-text-field--with-leading-icon mdc-text-field--with-trailing-icon">
-//    <i class="material-icons mdc-text-field__icon">favorite</i>
-//    <i class="material-icons mdc-text-field__icon">visibility</i>
-//    <input class="mdc-text-field__input" id="text-field-hero-input">
-//    <div class="mdc-line-ripple"></div>
-//    <label for="text-field-hero-input" class="mdc-floating-label">lorem ipsum</label>
-//  </div>
-type tfFilled struct {
-	container         dom.Element
-	div               dom.Element
-	icon1             dom.Element
-	icon2             dom.Element
-	input             dom.Element
-	lineRipple        dom.Element
-	label             dom.Element
-	helperDiv         dom.Element
-	helperText        dom.Element
-	valueLeadingIcon  icon.Icon
-	valueTrailingIcon icon.Icon
-	valueLabel        string
-	valueInput        string
-	valueHelper       string
-	maxLen            int
-	foundation        js.Foundation
-}
-
-func newTFFilled(parentDiv dom.Element) *tfFilled {
-	t := &tfFilled{container: parentDiv}
-
-	t.div = dom.CreateElement("div")
-	t.icon1 = dom.CreateElement("i").SetClassName("material-icons mdc-text-field__icon")
-	t.icon2 = dom.CreateElement("i").SetClassName("material-icons mdc-text-field__icon")
-	t.input = dom.CreateElement("input").AddClass("mdc-text-field__input")
-	t.input.SetId(nextId())
-	t.lineRipple = dom.CreateElement("div").AddClass("mdc-line-ripple")
-	t.label = dom.CreateElement("label").SetFor(t.input.Id()).AddClass("mdc-floating-label")
-
-	t.helperText = dom.CreateElement("div").SetClassName("mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg")
-	t.helperDiv = dom.CreateElement("div").AddClass("mdc-text-field-helper-line")
-	t.helperDiv.AppendChild(t.helperText)
-
-	t.apply()
-	return t
-}
-
-func (t *tfFilled) apply() {
-	t.foundation.Release()
-
-	t.container.SetClassName("text-field-container")
-	t.container.SetTextContent("")
-	t.div.SetClassName("mdc-text-field")
-
-	if len(t.valueLeadingIcon) > 0 {
-		t.div.AddClass("mdc-text-field--with-leading-icon")
-		t.icon1.SetTextContent(string(t.valueLeadingIcon))
-		t.div.AppendChild(t.icon1)
-	}
-
-	if len(t.valueTrailingIcon) > 0 {
-		t.div.AddClass("mdc-text-field--with-trailing-icon")
-		t.icon2.SetTextContent(string(t.valueTrailingIcon))
-		t.div.AppendChild(t.icon2)
-	}
-	t.setInput(t.valueInput)
-	t.div.AppendChild(t.input)
-
-	t.div.AppendChild(t.lineRipple)
-
-	if len(t.valueLabel) > 0 {
-		t.label.SetTextContent(t.valueLabel)
-		t.div.AppendChild(t.label)
-	} else {
-		t.div.AddClass("mdc-text-field--no-label")
-	}
-
-	t.container.AppendChild(t.div)
-
-	if len(t.valueHelper) > 0 {
-		t.helperText.SetTextContent(t.valueHelper)
-		t.container.AppendChild(t.helperDiv)
-	}
-
-	if t.maxLen != 0 {
-		t.input.Unwrap().Set("maxLength", t.maxLen)
-		t.helperDiv.AppendChild(dom.CreateElement("div").SetClassName("mdc-text-field-character-counter"))
-	}
-
-	t.foundation = js.Attach(js.TextField, t.container)
-}
-
-// setInput fixes FOUC label
-func (t *tfFilled) setInput(val string) {
-	t.label.SetClassName("mdc-floating-label")
-	if len(val) > 0 {
-		t.label.AddClass("mdc-floating-label--float-above")
-	}
-	t.input.Unwrap().Set("value", val)
-	t.valueInput = val
-}
-
-func (t *tfFilled) setLabel(val string) {
-	t.valueLabel = val
-	t.apply()
-}
-
-func (t *tfFilled) setTrailingIcon(i icon.Icon) {
-	t.valueTrailingIcon = i
-	t.apply()
-}
-
-func (t *tfFilled) setLeadingIcon(i icon.Icon) {
-	t.valueLeadingIcon = i
-	t.apply()
-}
-
-func (t *tfFilled) Release() {
-	t.foundation.Release()
-}
-
-func (t *tfFilled) setEnabled(b bool) {
-	t.input.SetDisabled(!b)
-	if b {
-		t.div.RemoveClass("mdc-text-field--disabled")
-	} else {
-		t.div.AddClass("mdc-text-field--disabled")
-	}
-}
-
-func (t *tfFilled) setHelper(str string) {
-	t.valueHelper = str
-	t.apply()
-}
-
-func (t *tfFilled) mdcTextField() dom.Element {
-	return t.div
-}
-
-func (t *tfFilled) inputField() dom.Element {
-	return t.input
-}
-
-func (t *tfFilled) setMaxLength(c int) {
-	t.maxLen = c
-	t.apply()
 }
