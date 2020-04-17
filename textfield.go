@@ -188,7 +188,7 @@ func (t *TextField) SetInvalid(b bool) *TextField {
 	if !t.fndTF.IsValid() {
 		t.invalidate(true)
 	}
-	t.fndTF.Unwrap().Set("useNativeValidation", false)
+	t.fndTF.Unwrap().Set("useNativeValidation", !b)
 	t.fndTF.Unwrap().Set("valid", !b)
 	return t
 }

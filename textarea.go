@@ -7,7 +7,7 @@ import (
 
 type TextArea struct {
 	*absComponent
-	layoutCtr textAreaLayoutController
+	layoutCtr *taDefault
 }
 
 func NewTextArea() *TextArea {
@@ -69,6 +69,8 @@ func (t *TextArea) SetColumns(c int) *TextArea {
 }*/
 
 func (t *TextArea) SetInvalid(b bool) *TextArea {
+	t.layoutCtr.foundation.Unwrap().Set("useNativeValidation", !b)
+	t.layoutCtr.foundation.Unwrap().Set("valid", !b)
 	if b {
 		t.layoutCtr.mdcTextField().AddClass("mdc-text-field--invalid")
 	} else {
