@@ -76,9 +76,22 @@ func Margin() Style {
 	})
 }
 
+func CenterHorizontal() Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().Set("margin-left", "auto")
+		element.Style().Set("margin-right", "auto")
+	})
+}
+
 func MarginTop(scalar Scalar) Style {
 	return styleFunc(func(element dom.Element) {
 		element.Style().SetMarginTop(string(scalar))
+	})
+}
+
+func MaxWidth(scalar Scalar) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().Set("max-width", string(scalar))
 	})
 }
 

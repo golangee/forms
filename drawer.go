@@ -30,7 +30,7 @@ func NewDrawer(bar *TopAppBar, header View, menu *List, content View) *Drawer {
 
 	t.absComponent = newComponent(t, "div")
 	t.node().Style().Set("display", "flex") // Removes top gap between modal drawer and viewport
-	t.node().Style().Set("height", "100vh") // Ensures that permanent drawer extends to bottom of viewport
+	t.node().Style().Set("min-height", "100vh") // Ensures that permanent drawer extends to bottom of viewport
 	t.node().Style().Set("margin", "0")     // Removes top gap between top app bar and viewport
 
 	t.node().AppendChild(dom.CreateElement("div").SetClassName("behindSideMenu"))
