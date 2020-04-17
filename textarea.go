@@ -128,6 +128,7 @@ type taDefault struct {
 	valueHelper  string
 	maxLen       int
 	foundation   js.Foundation
+	fndContainer js.Foundation
 }
 
 func newTaDefault(parentDiv dom.Element) *taDefault {
@@ -184,7 +185,8 @@ func (t *taDefault) apply() {
 		t.container.AppendChild(dom.CreateElement("div").SetClassName("mdc-text-field-character-counter"))
 	}
 
-	t.foundation = js.Attach(js.TextField, t.container)
+	t.foundation = js.Attach(js.TextField, t.div)         // otherwise the focus border does not work
+	t.fndContainer = js.Attach(js.TextField, t.container) // otherwise the character count does not work
 }
 
 // setInput fixes FOUC label
@@ -204,6 +206,7 @@ func (t *taDefault) setLabel(val string) {
 
 func (t *taDefault) Release() {
 	t.foundation.Release()
+	t.fndContainer.Release()
 }
 
 func (t *taDefault) setEnabled(b bool) {
