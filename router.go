@@ -88,6 +88,10 @@ func (r *Router) Start() {
 	r.checkLocation()
 }
 
+func (r *Router) Reload(force bool) {
+	dom.GetWindow().Unwrap().Get("location").Call("reload", force)
+}
+
 func (r *Router) Release() {
 	for _, f := range r.funcs {
 		f.Release()
@@ -140,5 +144,8 @@ func (r *Router) onFragmentChanged(path string, query url.Values) {
 }
 
 func (r *Router) Navigate(u *url.URL) {
-	dom.GetWindow().Unwrap().Set("location", u.String())
+	Post(0, func() {
+		dom.GetWindow().Unwrap().Set("location", u.String()) //TODO without posting into JS event loop, this seems to randomly deadlock (when passing logging mutex?)
+	})
+
 }

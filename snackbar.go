@@ -16,6 +16,7 @@ type Snackbar struct {
 	fnd                  js2.Foundation
 	action               func(v View)
 	callActionAfterClose bool
+	timeout              time.Duration
 }
 
 func NewSnackbar(text string, actionLabel string) *Snackbar {
@@ -67,7 +68,7 @@ func (t *Snackbar) SetText(str string) *Snackbar {
 // SetTimeout value must be between 4000 and 10000 (or -1 to disable the timeout completely) or an error will be thrown.
 // Defaults is 5 seconds.
 func (t *Snackbar) SetTimeout(d time.Duration) *Snackbar {
-	t.fnd.Unwrap().Set("timeoutMs", d.Milliseconds())
+	t.timeout = d
 	return t
 }
 
@@ -79,6 +80,13 @@ func (t *Snackbar) Show(v View) *Snackbar {
 		return t
 	}
 	t.fnd = js2.Attach(js2.Snackbar, t.node())
+	if t.timeout != 0 {
+		d := t.timeout.Milliseconds()
+		if d < 4000 {
+			d = -1
+		}
+		t.fnd.Unwrap().Set("timeoutMs", d)
+	}
 	wnd.AddView(t)
 	t.fnd.Unwrap().Call("open")
 	return t
