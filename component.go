@@ -36,6 +36,10 @@ func (b *absComponent) style(styles ...Style) *absComponent {
 	return b
 }
 
+func (b *absComponent) isAttached() bool {
+	return b.par != nil
+}
+
 func (b *absComponent) attach(parent View) {
 	assertNotAttached(b)
 	b.par = parent

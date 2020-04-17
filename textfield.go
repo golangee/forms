@@ -35,6 +35,7 @@ type TextField struct {
 	mdcTextField   h.Element
 	input          h.Element
 	fndTF          js2.Foundation
+	dirty          bool
 }
 
 func NewTextField() *TextField {
@@ -62,14 +63,23 @@ func NewTextField() *TextField {
 		).Self(&t.helperLine),
 	)
 	t.labelNotch.Style().Set("display", "none")
-	t.reinitFoundation()
+	t.invalidate(false)
 	return t
 }
 
-func (t *TextField) reinitFoundation() {
+// invalidate postpones foundation construction until view is attached
+func (t *TextField) invalidate(force bool) {
+	if t.isAttached() || force {
+		t.dirty = false
+		t.initFoundation()
+	} else {
+		t.dirty = true
+	}
+}
+
+func (t *TextField) initFoundation() {
 	t.fndTF.Release()
 	t.fndTF = js2.Attach(js2.TextField, t.mdcTextField)
-	t.addResource(t.fndTF)
 }
 
 func (t *TextField) SetLeadingIcon(ico icon.Icon) *TextField {
@@ -102,13 +112,13 @@ func (t *TextField) SetEnabled(b bool) *TextField {
 	if !b {
 		t.mdcTextField.AddClass("field--disabled")
 	}
-	t.reinitFoundation()
+	t.invalidate(false)
 	return t
 }
 
 func (t *TextField) SetText(str string) *TextField {
 	t.input.SetAttr("value", str)
-	t.reinitFoundation()
+	t.invalidate(false)
 	return t
 }
 
@@ -121,7 +131,7 @@ func (t *TextField) SetLabel(str string) *TextField {
 		t.labelNotch.Style().Set("display", "block")
 	}
 	t.label.SetText(str)
-	t.reinitFoundation()
+	t.invalidate(false)
 	return t
 }
 
@@ -168,16 +178,18 @@ func (t *TextField) SetHelperPersistent(b bool) *TextField {
 func (t *TextField) SetMaxLength(chars int) *TextField {
 	t.characterCount.SetClassName("mdc-text-field-character-counter")
 	t.input.SetAttr("maxLength", chars)
-	t.reinitFoundation()
+	t.invalidate(false)
 	return t
 }
 
 func (t *TextField) SetInvalid(b bool) *TextField {
 	t.SetHelperPersistent(b)
 	t.mdcTextField.AddClass("mdc-text-field--invalid")
+	if !t.fndTF.IsValid() {
+		t.invalidate(true)
+	}
 	t.fndTF.Unwrap().Set("useNativeValidation", false)
 	t.fndTF.Unwrap().Set("valid", !b)
-	//t.reinitFoundation()
 	return t
 }
 
@@ -194,4 +206,17 @@ func (t *TextField) SetRequired(b bool) *TextField {
 		t.input.Unwrap().Delete("required")
 	}
 	return t
+}
+
+func (t *TextField) attach(v View) {
+	t.absComponent.attach(v)
+	if t.dirty {
+		t.dirty = false
+		t.invalidate(true)
+	}
+}
+
+func (t *TextField) Release() {
+	t.fndTF.Release()
+	t.absComponent.Release()
 }
