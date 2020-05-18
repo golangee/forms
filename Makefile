@@ -2,10 +2,10 @@
 ARTIFACT_NAME = wtkserve
 
 ## for the module itself
-MODULE_PATH = github.com/worldiety/wtk
+MODULE_PATH = github.com/golangee/forms
 
 ## the path which contains the main package to execute
-MAIN_PATH = github.com/worldiety/wtk/cmd/wtkserve
+MAIN_PATH = github.com/golangee/forms/cmd/wtkserve
 
 ## for ldflags replacement
 BUILD_FILE_PATH = ${MODULE_PATH}
@@ -38,7 +38,7 @@ test: ## Executes the tests
 
 build: generate ## Performs a build and puts everything into the build directory
 	${GO} generate ./...
-	${GO} build -ldflags "${LDFLAGS}" -o ${BUILD_DIR}/${ARTIFACT_NAME} ${MAIN_PATH}
+	GOOS=js GOARCH=wasm ${GO} build -ldflags "${LDFLAGS}" -o ${BUILD_DIR}/${ARTIFACT_NAME} ${MAIN_PATH}
 
 
 run: build ## Starts the compiled program
