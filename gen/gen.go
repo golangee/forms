@@ -55,6 +55,7 @@ func main() {
 	}
 
 	sb := strings.Builder{}
+	sb.WriteString("// +build !js,!wasm\n\n")
 	sb.WriteString("package material\n\n")
 
 	sb.WriteString("func files() map[string]res {\n")
