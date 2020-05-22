@@ -18,6 +18,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 )
@@ -34,7 +35,7 @@ type Watch struct {
 }
 
 func NewWatch(expected string) *Watch {
-	return &Watch{url: "/version", interval: 5 * time.Second, expected: expected}
+	return &Watch{url: "/version", interval: 5 * time.Second, expected: strings.TrimSpace(expected)}
 }
 
 func (a *Watch) SetInterval(d time.Duration) {
@@ -88,7 +89,7 @@ func (a *Watch) check(t time.Time) {
 		return
 	}
 
-	if string(msg) != a.expected {
+	if strings.TrimSpace(string(msg)) != a.expected {
 		a.notifyChanged(string(msg), a.expected)
 	}
 
