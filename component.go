@@ -15,6 +15,7 @@
 package forms
 
 import (
+	"context"
 	"github.com/golangee/forms/dom"
 	"github.com/golangee/forms/event"
 	"log"
@@ -24,18 +25,26 @@ import (
 
 // absComponent contains the basic implementation of a View
 type absComponent struct {
-	this      View // this is a pointer to the actual inheriting view
-	children  []View
-	par       View // nil, if not attached
-	elem      dom.Element
-	resources []Resource
+	this       View // this is a pointer to the actual inheriting view
+	children   []View
+	par        View // nil, if not attached
+	elem       dom.Element
+	resources  []Resource
+	scope      context.Context
+	cancelFunc context.CancelFunc
 }
 
 func newComponent(self View, tag string) *absComponent {
-	return &absComponent{
+	b := &absComponent{
 		this: self,
 		elem: dom.CreateElement(tag),
 	}
+	b.scope, b.cancelFunc = context.WithCancel(context.Background())
+	return b
+}
+
+func (b *absComponent) Scope() context.Context {
+	return b.scope
 }
 
 func (b *absComponent) addResource(r Resource) *absComponent {
@@ -117,6 +126,10 @@ func (b *absComponent) Release() {
 	// we do not remove the child nodes, because the root node can just be GCed, which is probably more efficient
 	for _, res := range b.resources {
 		res.Release()
+	}
+
+	if b.cancelFunc != nil {
+		b.cancelFunc()
 	}
 }
 

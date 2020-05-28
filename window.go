@@ -15,6 +15,7 @@
 package forms
 
 import (
+	"context"
 	"fmt"
 	"github.com/golangee/forms/dom"
 	"log"
@@ -26,6 +27,11 @@ type Window struct {
 	window dom.Window
 	ctx    Context
 	views  []View
+}
+
+// because releasing a window has no effect, this returned scope cannot be cancelled.
+func (w *Window) Scope() context.Context {
+	return context.Background()
 }
 
 func (w *Window) Context() Context {
@@ -67,7 +73,7 @@ func (w *Window) RemoveAll() {
 	w.window.Document().Body().SetInnerHTML("")
 	w.views = nil
 	w.clearListeners()
-	w.window.Document().Body().Unwrap().Set("scrollTop",0)
+	w.window.Document().Body().Unwrap().Set("scrollTop", 0)
 }
 
 func (w *Window) AddView(v View) {
@@ -85,7 +91,6 @@ func (w *Window) RemoveView(v View) {
 	}
 	//w.node().RemoveChild(v.node()) currently the child calls it at the parents node, seems like a bad separation
 }
-
 
 func Run(target View, init func()) {
 	defer func() {

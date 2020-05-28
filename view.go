@@ -14,7 +14,10 @@
 
 package forms
 
-import "github.com/golangee/forms/dom"
+import (
+	"context"
+	"github.com/golangee/forms/dom"
+)
 
 // A Resource release method should be called for any resource, as soon as it is not required anymore to avoid
 // memory leaks. Afterwards the Resource must not be used anymore.
@@ -33,7 +36,8 @@ type Resource interface {
 type View interface {
 	internalView
 	Resource
-	Context() Context // Context of View, usually taken from the top-most root, where parent is nil
+	Context() Context       // Context of View, usually taken from the top-most root, where parent is nil
+	Scope() context.Context // Scope of the view, which is cancelled as soon as the view is destroyed.
 }
 
 // internalView contains implementation specific details, which we don't want developers to depend on.
