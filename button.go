@@ -38,6 +38,7 @@ type Button struct {
 	Text  string
 	label dom.Element
 	*absComponent
+	leadingIcon dom.Element
 }
 
 func NewButton(text string) *Button {
@@ -57,12 +58,21 @@ func NewButton(text string) *Button {
 func (t *Button) AddIcon(icon icon.Icon, alignment Alignment) *Button {
 	switch alignment {
 	case Leading:
-		t.node().InsertBefore(dom.CreateElement("i").SetClassName("material-icons mdc-button__icon").SetInnerText(string(icon)), t.label)
+		if !t.leadingIcon.IsValid() {
+			t.leadingIcon = dom.CreateElement("i").SetClassName("material-icons mdc-button__icon").SetInnerText(string(icon))
+			t.node().InsertBefore(t.leadingIcon, t.label)
+		}
+		t.leadingIcon.SetInnerText(string(icon))
 	case Trailing:
 		t.node().AppendChild(dom.CreateElement("i").SetClassName("material-icons mdc-button__icon").SetInnerText(string(icon)))
 	default:
 		panic("unsupported alignment: " + alignment)
 	}
+	return t
+}
+
+func (t *Button) SetLeadingIcon(icon icon.Icon) *Button {
+	t.AddIcon(icon, Leading)
 	return t
 }
 

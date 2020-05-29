@@ -29,8 +29,17 @@ func NewElement(v js.Value) Element {
 	return Element{v, absNode{v}, absEventTarget{v}}
 }
 
+func (s Element) IsValid() bool {
+	return !s.val.IsUndefined()
+}
+
 func (s Element) SetClassName(str string) Element {
 	s.val.Set("className", str)
+	return s
+}
+
+func (s Element) SetInnerText(str string) Element {
+	s.absNode.SetInnerText(str)
 	return s
 }
 

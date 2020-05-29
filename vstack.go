@@ -24,6 +24,14 @@ func NewVStack() *VStack {
 	return t
 }
 
+func (t *VStack) ClearViews() ViewGroup {
+	return t.RemoveAll()
+}
+
+func (t *VStack) AppendViews(views ...View) ViewGroup {
+	return t.AddViews(views...)
+}
+
 func (t *VStack) AddViews(views ...View) *VStack {
 	for _, v := range views {
 		v.node().Style().Set("display", "block")

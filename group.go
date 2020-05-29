@@ -25,10 +25,23 @@ func NewGroup(views ...View) *Group {
 	return t
 }
 
+func (t *Group) ClearViews() ViewGroup {
+	return t.RemoveAll()
+}
+
+func (t *Group) AppendViews(views ...View) ViewGroup {
+	return t.AddViews(views...)
+}
+
 func (t *Group) AddViews(views ...View) *Group {
 	for _, v := range views {
 		t.addView(v)
 	}
+	return t
+}
+
+func (t *Group) RemoveAll() *Group {
+	t.absComponent.removeAll()
 	return t
 }
 

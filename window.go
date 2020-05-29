@@ -29,6 +29,14 @@ type Window struct {
 	views  []View
 }
 
+func (w *Window) ClearViews() ViewGroup {
+	return w.RemoveAll()
+}
+
+func (w *Window) AppendViews(views ...View) ViewGroup {
+	return w.AddViews(views...)
+}
+
 // because releasing a window has no effect, this returned scope cannot be cancelled.
 func (w *Window) Scope() context.Context {
 	return context.Background()
@@ -62,7 +70,7 @@ func (w *Window) clearListeners() {
 	oldBody.Get("parentNode").Call("replaceChild", newBody, oldBody)
 }
 
-func (w *Window) RemoveAll() {
+func (w *Window) RemoveAll() *Window {
 	for _, v := range w.views {
 		if v == nil {
 			continue
@@ -74,12 +82,21 @@ func (w *Window) RemoveAll() {
 	w.views = nil
 	w.clearListeners()
 	w.window.Document().Body().Unwrap().Set("scrollTop", 0)
+	return w
 }
 
-func (w *Window) AddView(v View) {
+func (w *Window) AddView(v View) *Window {
 	w.views = append(w.views, v)
 	v.attach(w)
 	w.node().AppendChild(v.node())
+	return w
+}
+
+func (w *Window) AddViews(views ...View) *Window {
+	for _, v := range views {
+		w.AddView(v)
+	}
+	return w
 }
 
 func (w *Window) RemoveView(v View) {

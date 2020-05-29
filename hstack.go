@@ -25,10 +25,23 @@ func NewHStack() *HStack {
 	return t
 }
 
+func (t *HStack) ClearViews() ViewGroup {
+	return t.RemoveAll()
+}
+
+func (t *HStack) AppendViews(views ...View) ViewGroup {
+	return t.AddViews(views...)
+}
+
 func (t *HStack) AddViews(views ...View) *HStack {
 	for _, v := range views {
 		t.addView(v)
 	}
+	return t
+}
+
+func (t *HStack) RemoveAll() *HStack {
+	t.absComponent.removeAll()
 	return t
 }
 
