@@ -14,45 +14,48 @@
 
 package forms
 
-type Group struct {
+// Card represents the material card component, see https://material.io/components/cards.
+type Card struct {
 	*absComponent
 }
 
-func NewGroup(views ...View) *Group {
-	t := &Group{}
+// NewCard creates a new card component.
+func NewCard(views ...View) *Card {
+	t := &Card{}
 	t.absComponent = newComponent(t, "div")
+	t.node().AddClass("mdc-card")
 	t.node().Style().Set("box-sizing", "border-box")
 	t.AddViews(views...)
 	return t
 }
 
-func (t *Group) ClearViews() ViewGroup {
+func (t *Card) ClearViews() ViewGroup {
 	return t.RemoveAll()
 }
 
-func (t *Group) AppendViews(views ...View) ViewGroup {
+func (t *Card) AppendViews(views ...View) ViewGroup {
 	return t.AddViews(views...)
 }
 
-func (t *Group) AddViews(views ...View) *Group {
+func (t *Card) AddViews(views ...View) *Card {
 	for _, v := range views {
 		t.addView(v)
 	}
 	return t
 }
 
-func (t *Group) RemoveAll() *Group {
+func (t *Card) RemoveAll() *Card {
 	t.absComponent.removeAll()
 	return t
 }
 
-func (t *Group) Style(style ...Style) *Group {
+func (t *Card) Style(style ...Style) *Card {
 	t.absComponent.style(style...)
 	return t
 }
 
 // Self assigns the receiver to the given reference
-func (t *Group) Self(ref **Group) *Group {
+func (t *Card) Self(ref **Card) *Card {
 	*ref = t
 	return t
 }

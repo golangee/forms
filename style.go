@@ -115,6 +115,12 @@ func ForegroundColor(color Color) Style {
 	})
 }
 
+func BackgroundColor(color Color) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().SetBackgroundColor(color.String())
+	})
+}
+
 func Font(name FontStyle) Style {
 	return styleFunc(func(element dom.Element) {
 		element.AddClass(string(name))
@@ -134,5 +140,11 @@ func Pixel(i int) Scalar {
 func Width(scalar Scalar) Style {
 	return styleFunc(func(element dom.Element) {
 		element.Style().Set("width", string(scalar))
+	})
+}
+
+func Height(scalar Scalar) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().Set("height", string(scalar))
 	})
 }

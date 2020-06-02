@@ -24,6 +24,10 @@ func (s Style) SetColor(v string) {
 	s.val.Set("color", v)
 }
 
+func (s Style) SetBackgroundColor(v string) {
+	s.val.Set("background-color", v)
+}
+
 func (s Style) SetPaddingLeft(v string) {
 	s.val.Set("padding-left", v)
 }

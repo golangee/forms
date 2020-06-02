@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/golangee/forms/theme/material/icon"
 	"net/url"
+	"reflect"
 )
 
 type ErrorView struct {
@@ -13,7 +14,7 @@ type ErrorView struct {
 	body *Group
 	err  error
 	hide bool
-	btn *Button
+	btn  *Button
 }
 
 func NewErrorView(err error) *ErrorView {
@@ -99,8 +100,12 @@ func newDetailErrorView(err error) *detailErrorView {
 		}
 
 		typ := id
-		if id != class {
+		if id != class && class != "" {
 			typ += " (" + class + ")"
+		}
+
+		if typ == "" {
+			typ = reflect.TypeOf(root).String()
 		}
 
 		vg.AddItems(NewListTwoLineItem(msg, typ).SetLeadingView(NewIcon(icon.Error)))
