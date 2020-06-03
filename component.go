@@ -143,8 +143,10 @@ func (b *absComponent) addEventListener(t event.Type, f func(v View)) {
 
 func (b *absComponent) Context() Context {
 	if b.parent() == nil {
-		log.Println("here is " + reflect.TypeOf(b.this).String() + " and i'm not attached")
-		return nil
+		log.Println("here is " + reflect.TypeOf(b.this).String() + " and i'm not attached, returning mock context")
+
+		mock := &myContext{r: NewRouter()}
+		return mock
 	}
 	return b.parent().Context()
 }

@@ -21,6 +21,7 @@ import (
 	"syscall/js"
 )
 
+// Picker is also known as Combobox, Dropdown or Spinner.
 type Picker struct {
 	*absComponent
 	menu           h.Element
@@ -28,6 +29,7 @@ type Picker struct {
 	helper         h.Element
 	fnd            js2.Foundation
 	selectListener func(v *Picker)
+	myOptions      []string
 }
 
 func NewPicker() *Picker {
@@ -78,6 +80,7 @@ func (t *Picker) SetInvalid(b bool) *Picker {
 }
 
 func (t *Picker) SetOptions(options ...string) *Picker {
+	t.myOptions = options
 	t.fnd.Release()
 	t.menu.SetTextContent("")
 	ul := h.CreateElement("ul").AddClass("mdc-list")
@@ -115,6 +118,27 @@ func (t *Picker) Selected() int {
 func (t *Picker) SetSelected(idx int) *Picker {
 	t.fnd.Unwrap().Set("selectedIndex", idx)
 	return t
+}
+
+func (t *Picker) SetSelectedString(str string) *Picker {
+	for idx, v := range t.myOptions {
+		if v == str {
+			t.SetSelected(idx)
+			break
+		}
+	}
+	return t
+}
+
+func (t *Picker) SelectedString() string {
+	idx := t.Selected()
+	for i, v := range t.myOptions {
+		if i == idx {
+			return v
+		}
+	}
+
+	return ""
 }
 
 func (t *Picker) SetEnabled(b bool) *Picker {

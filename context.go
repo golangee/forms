@@ -15,6 +15,7 @@
 package forms
 
 import (
+	"github.com/golangee/forms/locale"
 	"net/url"
 	"strconv"
 	"strings"
@@ -29,6 +30,12 @@ type Context interface {
 	router() *Router
 	Navigate(path string, params ...NamedParameter)
 	Routes() []Route
+	// Languages returns the user preferred languages. It is never empty and returns "und" if not known.
+	Languages() []string
+
+	// Invalidate tries to reload the affected view as efficient as possible. However it may likely just reload
+	// the entire current url
+	Invalidate()
 }
 
 func IntParam(key string, val int) NamedParameter {
@@ -45,6 +52,14 @@ func NewContext(router *Router) Context {
 
 type myContext struct {
 	r *Router
+}
+
+func (c *myContext) Invalidate() {
+	c.r.Invalidate()
+}
+
+func (c *myContext) Languages() []string {
+	return locale.Languages()
 }
 
 func (c *myContext) Navigate(path string, params ...NamedParameter) {

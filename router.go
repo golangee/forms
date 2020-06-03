@@ -106,6 +106,16 @@ func (r *Router) Reload(force bool) {
 	dom.GetWindow().Unwrap().Get("location").Call("reload", force)
 }
 
+func (r *Router) Invalidate() error {
+	f, err := url.Parse(r.lastFragment)
+	if err != nil {
+		return err
+	}
+
+	r.onFragmentChanged(f.Path, f.Query())
+	return nil
+}
+
 func (r *Router) Release() {
 	for _, f := range r.funcs {
 		f.Release()
