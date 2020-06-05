@@ -25,6 +25,7 @@ func NewCard(views ...View) *Card {
 	t.absComponent = newComponent(t, "div")
 	t.node().AddClass("mdc-card")
 	t.node().Style().Set("box-sizing", "border-box")
+	t.node().Style().Set("overflow","auto")
 	t.AddViews(views...)
 	return t
 }

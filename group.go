@@ -22,6 +22,7 @@ func NewGroup(views ...View) *Group {
 	t := &Group{}
 	t.absComponent = newComponent(t, "div")
 	t.node().Style().Set("box-sizing", "border-box")
+	t.node().Style().Set("overflow","auto")
 	t.AddViews(views...)
 	return t
 }

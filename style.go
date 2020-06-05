@@ -97,6 +97,12 @@ func CenterHorizontal() Style {
 	})
 }
 
+func AlignBottom() Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().Set("margin-bottom", "0px")
+	})
+}
+
 func MarginTop(scalar Scalar) Style {
 	return styleFunc(func(element dom.Element) {
 		element.Style().SetMarginTop(string(scalar))
@@ -129,8 +135,30 @@ func Font(name FontStyle) Style {
 
 type Scalar string
 
+type scalarSlice []Scalar
+
+func (s scalarSlice) toStrings() []string {
+	res := make([]string, len(s))
+	for i, v := range s {
+		res[i] = string(v)
+	}
+	return res
+}
+
+func Auto() Scalar {
+	return Scalar("auto")
+}
+
 func Percent(i int) Scalar {
 	return Scalar(strconv.Itoa(i) + "%")
+}
+
+func PercentViewPortHeight(i int) Scalar {
+	return Scalar(strconv.Itoa(i) + "vh")
+}
+
+func PercentViewPortWidth(i int) Scalar {
+	return Scalar(strconv.Itoa(i) + "vw")
 }
 
 func Pixel(i int) Scalar {
@@ -140,6 +168,12 @@ func Pixel(i int) Scalar {
 func Width(scalar Scalar) Style {
 	return styleFunc(func(element dom.Element) {
 		element.Style().Set("width", string(scalar))
+	})
+}
+
+func MinWidth(scalar Scalar) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().Set("min-width", string(scalar))
 	})
 }
 

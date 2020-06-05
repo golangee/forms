@@ -18,9 +18,10 @@ type VStack struct {
 	*absComponent
 }
 
-func NewVStack() *VStack {
+func NewVStack(views ...View) *VStack {
 	t := &VStack{}
 	t.absComponent = newComponent(t, "div")
+	t.AddViews(views...)
 	return t
 }
 
