@@ -40,6 +40,10 @@ func floatToPx(v float64) string {
 	return strconv.Itoa(int(v)) + "px"
 }
 
+func intToPx(v int) string {
+	return strconv.Itoa(v) + "px"
+}
+
 func nextId() string {
 	htmlId++
 	return "id-" + strconv.Itoa(htmlId)

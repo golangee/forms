@@ -39,6 +39,11 @@ const (
 	Start GridAlign = "start"
 )
 
+// GridLayoutParams define how a view spans inside the grid container.
+type GridLayoutParams struct {
+	Area string
+}
+
 // A Grid offers a grid-based layout, where you define the area of children with rows and columns.
 type Grid struct {
 	*absComponent
@@ -50,6 +55,28 @@ func NewGrid() *Grid {
 	t.absComponent = newComponent(t, "div")
 	t.node().Style().Set("box-sizing", "border-box")
 	t.node().Style().Set("display", "grid")
+	return t
+}
+
+// SetAreas defines the grid layout "visually" in a two dimensional string array. Example:
+//  SetAreas([][]string{
+//   {"header", "header", "header"},
+//   {"menu", "main", "main"},
+//   {"menu", "footer", "footer"},
+//  })
+//
+// Use the Area
+func (t *Grid) SetAreas(areas [][]string) *Grid {
+	sb := &strings.Builder{}
+	for _, row := range areas {
+		sb.WriteRune('\'')
+		for _, col := range row {
+			sb.WriteString(col)
+			sb.WriteRune(' ')
+		}
+		sb.WriteRune('\'')
+	}
+	t.node().Style().Set("grid-template-areas", sb.String())
 	return t
 }
 
@@ -114,6 +141,12 @@ func (t *Grid) AddViews(views ...View) *Grid {
 	for _, v := range views {
 		t.addView(v)
 	}
+	return t
+}
+
+func (t *Grid) AddView(view View, opt GridLayoutParams) *Grid {
+	view.node().Style().Update("grid-area", opt.Area)
+	t.addView(view)
 	return t
 }
 

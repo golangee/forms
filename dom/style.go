@@ -64,6 +64,18 @@ func (s Style) Set(k, v string) {
 	s.val.Set(k, v)
 }
 
+func (s Style) Delete(k string) {
+	s.val.Delete(k)
+}
+
+func (s Style) Update(k, v string) {
+	if v == "" {
+		s.Delete(k)
+	} else {
+		s.Set(k, v)
+	}
+}
+
 func (s Style) SetProperty(k, v string) {
 	s.val.Call("setProperty", k, v)
 }

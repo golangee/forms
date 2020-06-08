@@ -14,14 +14,16 @@
 
 package forms
 
+// HStack is a horizontal grid with just a single row.
 type HStack struct {
-	*absComponent
+	*Grid
 }
 
-func NewHStack() *HStack {
+// NewHStack creates a new horizontal view stack.
+func NewHStack(views ...View) *HStack {
 	t := &HStack{}
-	t.absComponent = newComponent(t, "div")
-	t.node().Style().Set("display", "flex")
+	t.Grid = NewGrid()
+	t.AddViews(views...)
 	return t
 }
 
@@ -35,18 +37,19 @@ func (t *HStack) AppendViews(views ...View) ViewGroup {
 
 func (t *HStack) AddViews(views ...View) *HStack {
 	for _, v := range views {
+		v.node().Style().Set("grid-row", "1") // unclear, if this is the best way
 		t.addView(v)
 	}
 	return t
 }
 
 func (t *HStack) RemoveAll() *HStack {
-	t.absComponent.removeAll()
+	t.Grid.removeAll()
 	return t
 }
 
 func (t *HStack) Style(style ...Style) *HStack {
-	t.absComponent.style(style...)
+	t.Grid.style(style...)
 	return t
 }
 

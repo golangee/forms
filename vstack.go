@@ -14,13 +14,17 @@
 
 package forms
 
+var _ View = (*VStack)(nil)
+
+// VStack is actually a vertical grid, with just a single column.
 type VStack struct {
-	*absComponent
+	*Grid
 }
 
+// NewVStack creates a new vertical stack
 func NewVStack(views ...View) *VStack {
 	t := &VStack{}
-	t.absComponent = newComponent(t, "div")
+	t.Grid = NewGrid()
 	t.AddViews(views...)
 	return t
 }
@@ -35,19 +39,19 @@ func (t *VStack) AppendViews(views ...View) ViewGroup {
 
 func (t *VStack) AddViews(views ...View) *VStack {
 	for _, v := range views {
-		v.node().Style().Set("display", "block")
-		t.addView(v)
+		//v.node().Style().Set("display", "block") // TODO this is wrong and destroy nested things like grid
+		t.Grid.AddView(v, GridLayoutParams{})
 	}
 	return t
 }
 
 func (t *VStack) RemoveAll() *VStack {
-	t.absComponent.removeAll()
+	t.Grid.RemoveAll()
 	return t
 }
 
 func (t *VStack) Style(style ...Style) *VStack {
-	t.absComponent.style(style...)
+	t.Grid.style(style...)
 	return t
 }
 

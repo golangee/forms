@@ -37,7 +37,7 @@ const Overline FontStyle = "mdc-typography--overline"
 const DrawerTitle FontStyle = "mdc-drawer__title"
 const DrawerSubTitle FontStyle = "mdc-drawer__subtitle"
 
-var DefaultPadding = 8.0
+var DefaultPadding = 8
 
 // A Style modifies different kinds of visualization of a View.
 type Style interface {
@@ -74,7 +74,7 @@ func PadBottom(v float64) Style {
 
 func Padding() Style {
 	return styleFunc(func(element dom.Element) {
-		element.Style().SetPadding(floatToPx(DefaultPadding))
+		element.Style().SetPadding(intToPx(DefaultPadding))
 	})
 }
 
@@ -86,7 +86,7 @@ func Repel() Style {
 
 func Margin() Style {
 	return styleFunc(func(element dom.Element) {
-		element.Style().SetMargin(floatToPx(DefaultPadding))
+		element.Style().SetMargin(intToPx(DefaultPadding))
 	})
 }
 
