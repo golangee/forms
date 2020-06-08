@@ -16,7 +16,6 @@ package forms
 
 import (
 	"github.com/golangee/forms/dom"
-	"strconv"
 )
 
 type FontStyle string
@@ -130,55 +129,5 @@ func BackgroundColor(color Color) Style {
 func Font(name FontStyle) Style {
 	return styleFunc(func(element dom.Element) {
 		element.AddClass(string(name))
-	})
-}
-
-type Scalar string
-
-type scalarSlice []Scalar
-
-func (s scalarSlice) toStrings() []string {
-	res := make([]string, len(s))
-	for i, v := range s {
-		res[i] = string(v)
-	}
-	return res
-}
-
-func Auto() Scalar {
-	return Scalar("auto")
-}
-
-func Percent(i int) Scalar {
-	return Scalar(strconv.Itoa(i) + "%")
-}
-
-func PercentViewPortHeight(i int) Scalar {
-	return Scalar(strconv.Itoa(i) + "vh")
-}
-
-func PercentViewPortWidth(i int) Scalar {
-	return Scalar(strconv.Itoa(i) + "vw")
-}
-
-func Pixel(i int) Scalar {
-	return Scalar(strconv.Itoa(i) + "px")
-}
-
-func Width(scalar Scalar) Style {
-	return styleFunc(func(element dom.Element) {
-		element.Style().Set("width", string(scalar))
-	})
-}
-
-func MinWidth(scalar Scalar) Style {
-	return styleFunc(func(element dom.Element) {
-		element.Style().Set("min-width", string(scalar))
-	})
-}
-
-func Height(scalar Scalar) Style {
-	return styleFunc(func(element dom.Element) {
-		element.Style().Set("height", string(scalar))
 	})
 }

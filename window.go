@@ -29,6 +29,18 @@ type Window struct {
 	views  []View
 }
 
+// GetWindow tries to return the window from the given view tree. The window is usually
+// the view root. If the view is not attached, returns nil.
+func GetWindow(view View) *Window {
+	if view == nil {
+		return nil
+	}
+	if w, ok := view.(*Window); ok {
+		return w
+	}
+	return GetWindow(view.parent())
+}
+
 func (w *Window) ClearViews() ViewGroup {
 	return w.RemoveAll()
 }
@@ -107,6 +119,21 @@ func (w *Window) RemoveView(v View) {
 		}
 	}
 	//w.node().RemoveChild(v.node()) currently the child calls it at the parents node, seems like a bad separation
+}
+
+// SetBackground sets the window background image buffer. The image is scaled using cover and centered inside.
+func (w *Window) SetBackground(url string) *Window {
+	size := Cover()
+	elem := w.window.Document().DocumentElement()
+	if url == "" {
+		elem.Style().Delete("background-size")
+		elem.Style().Delete("background")
+		return w
+	}
+
+	elem.Style().Set("background", "url("+url+") no-repeat center center fixed")
+	elem.Style().Set("background-size", string(size)) // order ist important here
+return w
 }
 
 func Run(target View, init func()) {

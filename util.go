@@ -49,15 +49,6 @@ func nextId() string {
 	return "id-" + strconv.Itoa(htmlId)
 }
 
-func getWindow(view View) *Window {
-	if view == nil {
-		return nil
-	}
-	if w, ok := view.(*Window); ok {
-		return w
-	}
-	return getWindow(view.parent())
-}
 
 func debugStr(value js.Value) string {
 	sb := &strings.Builder{}

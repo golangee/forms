@@ -88,7 +88,7 @@ func (t *Snackbar) SetTimeout(d time.Duration) *Snackbar {
 
 func (t *Snackbar) Show(v View) *Snackbar {
 	t.callActionAfterClose = false
-	wnd := getWindow(v)
+	wnd := GetWindow(v)
 	if wnd == nil {
 		log.Println("cannot show snackbar, view not attached")
 		return t
@@ -108,7 +108,7 @@ func (t *Snackbar) Show(v View) *Snackbar {
 
 func (t *Snackbar) destroy() {
 	t.callActionAfterClose = false
-	wnd := getWindow(t)
+	wnd := GetWindow(t)
 	t.Close()
 	t.fnd.Release()
 	if wnd == nil {

@@ -63,7 +63,7 @@ func ShowMessage(parent View, msg string) {
 }
 
 func (t *Dialog) Show(parent View) {
-	wnd := getWindow(parent)
+	wnd := GetWindow(parent)
 	if wnd == nil {
 		log.Println("cannot show dialog, view is not attached")
 		return
@@ -80,7 +80,7 @@ func (t *Dialog) Show(parent View) {
 }
 
 func (t *Dialog) destroy(parent View) {
-	wnd := getWindow(parent)
+	wnd := GetWindow(parent)
 	if wnd == nil {
 		log.Println("cannot show dialog, view is not attached")
 		return

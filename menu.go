@@ -82,7 +82,7 @@ func (t *Menu) ReleaseOnClose() *Menu {
 }
 
 func (t *Menu) Show(anchor View) {
-	wnd := getWindow(anchor)
+	wnd := GetWindow(anchor)
 	if wnd == nil {
 		log.Println("cannot show dialog, anchor is gone")
 		return

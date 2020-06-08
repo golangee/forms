@@ -35,8 +35,11 @@ const (
 	// columns (horizontally)
 	Center GridAlign = "center"
 
-	// Start aligns the cells at the right (horizontally) or bottom (vertically).
+	// Start aligns the cells at the left (horizontally) or top (vertically).
 	Start GridAlign = "start"
+
+	// End aligns the cells at the right (horizontally) or bottom (vertically).
+	End GridAlign = "end"
 )
 
 // GridLayoutParams define how a view spans inside the grid container.
