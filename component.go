@@ -70,12 +70,15 @@ func (b *absComponent) styleFor(criteria MediaCriteria, styles ...Style) *absCom
 			}
 		})
 	}
+
 	b.mediaMatcher.Add(criteria, func(view View) {
 		// apply the matched special styles only the first time a criteria is met
 		for _, s := range styles {
 			s.applyCSS(b.elem)
 		}
 	})
+
+	b.mediaMatcher.Check()
 
 	return b
 }
