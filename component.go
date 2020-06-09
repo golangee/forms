@@ -25,13 +25,15 @@ import (
 
 // absComponent contains the basic implementation of a View
 type absComponent struct {
-	this       View // this is a pointer to the actual inheriting view
-	children   []View
-	par        View // nil, if not attached
-	elem       dom.Element
-	resources  []Resource
-	scope      context.Context
-	cancelFunc context.CancelFunc
+	this          View // this is a pointer to the actual inheriting view
+	children      []View
+	par           View // nil, if not attached
+	elem          dom.Element
+	resources     []Resource
+	scope         context.Context
+	cancelFunc    context.CancelFunc
+	defaultStyles []Style
+	mediaMatcher  *MediaMatcher // usually nil, only non-nil if a conditional style has been set.
 }
 
 func newComponent(self View, tag string) *absComponent {
@@ -47,15 +49,34 @@ func (b *absComponent) Scope() context.Context {
 	return b.scope
 }
 
-func (b *absComponent) addResource(r Resource) *absComponent {
+func (b *absComponent) addResource(r Resource) {
 	b.resources = append(b.resources, r)
-	return b
 }
 
 func (b *absComponent) style(styles ...Style) *absComponent {
 	for _, s := range styles {
 		s.applyCSS(b.elem)
 	}
+	b.defaultStyles = styles
+	return b
+}
+
+func (b *absComponent) styleFor(criteria MediaCriteria, styles ...Style) *absComponent {
+	if b.mediaMatcher == nil {
+		b.mediaMatcher = NewMediaMatcher(b.this, func(view View) {
+			// apply all default styles, if nothing matches
+			for _, s := range b.defaultStyles {
+				s.applyCSS(b.elem)
+			}
+		})
+	}
+	b.mediaMatcher.Add(criteria, func(view View) {
+		// apply the matched special styles only the first time a criteria is met
+		for _, s := range styles {
+			s.applyCSS(b.elem)
+		}
+	})
+
 	return b
 }
 

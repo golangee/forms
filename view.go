@@ -47,8 +47,9 @@ type View interface {
 // This API must be considered very unstable and it may also map directly to native ui widgets one day, e.g. for
 // iOS or Android widgets.
 type internalView interface {
-	attach(parent View) // attach adds all nodes and modifications to the given parent node
-	detach()            // detach is the reverse of attach
-	parent() View       // parent returns nil or if attached the parent
-	node() dom.Element  // node returns the underlying DOM element
+	addResource(r Resource) // addResource takes ownership of the resource and releases it when destroyed
+	attach(parent View)     // attach adds all nodes and modifications to the given parent node
+	detach()                // detach is the reverse of attach
+	parent() View           // parent returns nil or if attached the parent
+	node() dom.Element      // node returns the underlying DOM element
 }

@@ -55,6 +55,12 @@ func (t *Card) Style(style ...Style) *Card {
 	return t
 }
 
+// StyleFor applies the given styles only if the criteria is met.
+func (t *Card) StyleFor(criteria MediaCriteria, style ...Style) *Card {
+	t.absComponent.styleFor(criteria, style...)
+	return t
+}
+
 // Self assigns the receiver to the given reference
 func (t *Card) Self(ref **Card) *Card {
 	*ref = t

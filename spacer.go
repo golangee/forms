@@ -14,6 +14,7 @@
 
 package forms
 
+// deprecated
 type Spacer struct {
 	*absComponent
 }

@@ -22,7 +22,7 @@ func NewGroup(views ...View) *Group {
 	t := &Group{}
 	t.absComponent = newComponent(t, "div")
 	t.node().Style().Set("box-sizing", "border-box")
-	t.node().Style().Set("overflow","auto")
+	t.node().Style().Set("overflow", "auto")
 	t.AddViews(views...)
 	return t
 }
@@ -47,8 +47,15 @@ func (t *Group) RemoveAll() *Group {
 	return t
 }
 
+// Style applies generic style attributes.
 func (t *Group) Style(style ...Style) *Group {
 	t.absComponent.style(style...)
+	return t
+}
+
+// StyleFor applies the given styles only if the criteria is met.
+func (t *Group) StyleFor(criteria MediaCriteria, style ...Style) *Group {
+	t.absComponent.styleFor(criteria, style...)
 	return t
 }
 

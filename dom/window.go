@@ -49,6 +49,10 @@ func (w Window) Unwrap() js.Value {
 	return w.val
 }
 
+// MatchesMedia is the javascript equivalent to css media queries. criteria is for example
+//  - (min-width:800px)
+//  - (min-width:800px) or (orientation: landscape)
+//  - (max-width: 800px)
 func (w Window) MatchesMedia(criteria string) bool {
 	return w.val.Call("matchMedia", criteria).Get("matches").Bool()
 }

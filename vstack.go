@@ -50,8 +50,15 @@ func (t *VStack) RemoveAll() *VStack {
 	return t
 }
 
+// Style applies generic style attributes.
 func (t *VStack) Style(style ...Style) *VStack {
 	t.Grid.style(style...)
+	return t
+}
+
+// StyleFor applies the given styles only if the criteria is met.
+func (t *VStack) StyleFor(criteria MediaCriteria, style ...Style) *VStack {
+	t.absComponent.styleFor(criteria, style...)
 	return t
 }
 

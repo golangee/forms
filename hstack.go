@@ -48,8 +48,15 @@ func (t *HStack) RemoveAll() *HStack {
 	return t
 }
 
+// Style applies generic style attributes.
 func (t *HStack) Style(style ...Style) *HStack {
 	t.Grid.style(style...)
+	return t
+}
+
+// StyleFor applies the given styles only if the criteria is met.
+func (t *HStack) StyleFor(criteria MediaCriteria, style ...Style) *HStack {
+	t.absComponent.styleFor(criteria, style...)
 	return t
 }
 

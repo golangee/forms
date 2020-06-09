@@ -23,10 +23,13 @@ import (
 	"strings"
 )
 
+var _ View = (*Window)(nil)
+
 type Window struct {
-	window dom.Window
-	ctx    Context
-	views  []View
+	window    dom.Window
+	ctx       Context
+	views     []View
+	resources []Resource
 }
 
 // GetWindow tries to return the window from the given view tree. The window is usually
@@ -39,6 +42,10 @@ func GetWindow(view View) *Window {
 		return w
 	}
 	return GetWindow(view.parent())
+}
+
+func (w *Window) addResource(r Resource) {
+	w.resources = append(w.resources, r)
 }
 
 func (w *Window) ClearViews() ViewGroup {
@@ -73,6 +80,9 @@ func (w *Window) node() dom.Element {
 }
 
 func (w *Window) Release() {
+	for _, r := range w.resources {
+		r.Release()
+	}
 }
 
 func (w *Window) clearListeners() {
@@ -133,7 +143,7 @@ func (w *Window) SetBackground(url string) *Window {
 
 	elem.Style().Set("background", "url("+url+") no-repeat center center fixed")
 	elem.Style().Set("background-size", string(size)) // order ist important here
-return w
+	return w
 }
 
 func Run(target View, init func()) {

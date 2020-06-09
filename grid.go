@@ -165,6 +165,12 @@ func (t *Grid) Style(style ...Style) *Grid {
 	return t
 }
 
+// StyleFor applies the given styles only if the criteria is met.
+func (t *Grid) StyleFor(criteria MediaCriteria, style ...Style) *Grid {
+	t.absComponent.styleFor(criteria, style...)
+	return t
+}
+
 // Self assigns the receiver to the given reference
 func (t *Grid) Self(ref **Grid) *Grid {
 	*ref = t
