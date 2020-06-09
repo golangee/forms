@@ -36,7 +36,13 @@ const Overline FontStyle = "mdc-typography--overline"
 const DrawerTitle FontStyle = "mdc-drawer__title"
 const DrawerSubTitle FontStyle = "mdc-drawer__subtitle"
 
-var DefaultPadding = 8
+type TypeWeight string
+
+const WeightNormal TypeWeight = "normal"
+const WeightLighter TypeWeight = "lighter"
+const WeightBolder TypeWeight = "500"
+
+var DefaultPadding = Pixel(8)
 
 // A Style modifies different kinds of visualization of a View.
 type Style interface {
@@ -53,27 +59,33 @@ func (s styleFunc) applyCSS(element dom.Element) {
 	s(element)
 }
 
-func PadLeft(v float64) Style {
+func PadLeft(scalar Scalar) Style {
 	return styleFunc(func(element dom.Element) {
-		element.Style().SetPaddingLeft(floatToPx(v))
+		element.Style().SetPaddingLeft(string(scalar))
 	})
 }
 
-func PadTop(v float64) Style {
+func PadRight(scalar Scalar) Style {
 	return styleFunc(func(element dom.Element) {
-		element.Style().SetPaddingTop(floatToPx(v))
+		element.Style().SetPaddingRight(string(scalar))
 	})
 }
 
-func PadBottom(v float64) Style {
+func PadTop(scalar Scalar) Style {
 	return styleFunc(func(element dom.Element) {
-		element.Style().SetPaddingBottom(floatToPx(v))
+		element.Style().SetPaddingTop(string(scalar))
+	})
+}
+
+func PadBottom(scalar Scalar) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().SetPaddingBottom(string(scalar))
 	})
 }
 
 func Padding() Style {
 	return styleFunc(func(element dom.Element) {
-		element.Style().SetPadding(intToPx(DefaultPadding))
+		element.Style().SetPadding(string(DefaultPadding))
 	})
 }
 
@@ -85,26 +97,31 @@ func Repel() Style {
 
 func Margin() Style {
 	return styleFunc(func(element dom.Element) {
-		element.Style().SetMargin(intToPx(DefaultPadding))
-	})
-}
-
-func CenterHorizontal() Style {
-	return styleFunc(func(element dom.Element) {
-		element.Style().Set("margin-left", "auto")
-		element.Style().Set("margin-right", "auto")
-	})
-}
-
-func AlignBottom() Style {
-	return styleFunc(func(element dom.Element) {
-		element.Style().Set("margin-bottom", "0px")
+		element.Style().SetMargin(string(DefaultPadding))
 	})
 }
 
 func MarginTop(scalar Scalar) Style {
 	return styleFunc(func(element dom.Element) {
 		element.Style().SetMarginTop(string(scalar))
+	})
+}
+
+func MarginBottom(scalar Scalar) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().SetMarginBottom(string(scalar))
+	})
+}
+
+func MarginLeft(scalar Scalar) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().SetMarginLeft(string(scalar))
+	})
+}
+
+func MarginRight(scalar Scalar) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().SetMarginRight(string(scalar))
 	})
 }
 
@@ -129,6 +146,12 @@ func BackgroundColor(color Color) Style {
 func Font(name FontStyle) Style {
 	return styleFunc(func(element dom.Element) {
 		element.AddClass(string(name))
+	})
+}
+
+func FontWeight(weight TypeWeight) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().Set("font-weight", string(weight))
 	})
 }
 

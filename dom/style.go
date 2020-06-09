@@ -32,6 +32,10 @@ func (s Style) SetPaddingLeft(v string) {
 	s.val.Set("padding-left", v)
 }
 
+func (s Style) SetPaddingRight(v string) {
+	s.val.Set("padding-right", v)
+}
+
 func (s Style) SetPaddingTop(v string) {
 	s.val.Set("padding-top", v)
 }
@@ -54,6 +58,14 @@ func (s Style) SetMarginBottom(v string) {
 
 func (s Style) SetMarginTop(v string) {
 	s.val.Set("margin-top", v)
+}
+
+func (s Style) SetMarginLeft(v string) {
+	s.val.Set("margin-left", v)
+}
+
+func (s Style) SetMarginRight(v string) {
+	s.val.Set("margin-right", v)
 }
 
 func (s Style) Unwrap() js.Value {

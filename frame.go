@@ -29,10 +29,10 @@ func NewFrame() *Frame {
 	t.node().Style().Set("left", "50%")
 	t.node().Style().Set("transform", "translate(-50%,-50%)")
 	*/
-
-	t.node().Style().Set("max-width", "600")
-	t.node().Style().Set("margin-left", "auto")
-	t.node().Style().Set("margin-right", "auto")
+	/*
+		t.node().Style().Set("max-width", "600")
+		t.node().Style().Set("margin-left", "auto")
+		t.node().Style().Set("margin-right", "auto")*/
 	return t
 }
 
