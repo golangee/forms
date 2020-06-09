@@ -131,3 +131,10 @@ func Font(name FontStyle) Style {
 		element.AddClass(string(name))
 	})
 }
+
+// BorderRadius sets all 4 edges to the same radius
+func BorderRadius(scalar Scalar) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().Set("border-radius", string(scalar))
+	})
+}

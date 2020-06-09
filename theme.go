@@ -14,16 +14,41 @@
 
 package forms
 
-import "github.com/golangee/forms/dom"
+import (
+	"github.com/golangee/forms/dom"
+	"syscall/js"
+)
 
 type ThemeController struct {
 	root dom.Element
 }
 
+// Color sets the current primary theme background color
 func (t ThemeController) SetColor(color Color) {
 	t.root.Style().SetProperty("--mdc-theme-primary", color.String())
 	t.root.Style().SetProperty("--mdc-theme-secondary", color.String())
 	t.root.Style().SetProperty("--wtk-primary-alpha", color.SetAlpha(222).String())
+}
+
+// Color returns the current primary theme background color
+func (t ThemeController) Color() Color {
+	val := js.Global().Call("getComputedStyle", t.root.Unwrap())
+	val = val.Call("getPropertyValue", "--mdc-theme-primary")
+
+	return ParseColor(val.String())
+}
+
+// SetForegroundColor sets the current primary theme foreground color
+func (t ThemeController) SetForegroundColor(color Color) {
+	t.root.Style().SetProperty("--mdc-theme-on-primary", color.String())
+}
+
+// ForegroundColor returns the current primary theme foreground color
+func (t ThemeController) ForegroundColor() Color {
+	val := js.Global().Call("getComputedStyle", t.root.Unwrap())
+	val = val.Call("getPropertyValue", "--mdc-theme-on-primary")
+
+	return ParseColor(val.String())
 }
 
 func Theme() ThemeController {

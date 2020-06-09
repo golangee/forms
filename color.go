@@ -15,12 +15,34 @@
 package forms
 
 import (
+	"encoding/hex"
 	"fmt"
+	"log"
+	"strings"
 )
 
 type Color uint32
 
 var Green = RGBA(0, 255, 0, 255)
+
+// ParseColor currently can only evaluate codes like #6200ee??
+func ParseColor(text string) Color {
+	text = strings.TrimSpace(text)
+	log.Println("!!!should parse ", text)
+	if strings.HasPrefix(text, "#") {
+		text = text[1:]
+		for len(text) < 8 {
+			text = text + "F"
+		}
+		log.Println("should parse ", text)
+
+		channels, _ := hex.DecodeString(text)
+		if len(channels) == 4 {
+			return RGBA(channels[0], channels[1], channels[2], channels[3])
+		}
+	}
+	return 0
+}
 
 func RGBA(r, g, b, a byte) Color {
 	return Color(uint32(r)<<24 | uint32(g)<<16 | uint32(b)<<8 | uint32(a))

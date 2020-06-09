@@ -103,6 +103,7 @@ func (t *Button) Self(ref **Button) *Button {
 	return t
 }
 
+// AddClickListener registers another click listener
 func (t *Button) AddClickListener(f func(v View)) *Button {
 	t.addEventListener(event.Click, f)
 	return t
