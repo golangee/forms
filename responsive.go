@@ -2,7 +2,6 @@ package forms
 
 import (
 	"github.com/golangee/forms/dom"
-	"log"
 	"strings"
 	"syscall/js"
 )
@@ -39,7 +38,6 @@ func MatchOne(criterias ...MediaCriteria) MediaCriteria {
 			sb.WriteString(" , ")
 		}
 	}
-	log.Println(sb.String())
 	return MediaCriteria(sb.String())
 }
 

@@ -17,7 +17,6 @@ package forms
 import (
 	"encoding/hex"
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -28,13 +27,11 @@ var Green = RGBA(0, 255, 0, 255)
 // ParseColor currently can only evaluate codes like #6200ee??
 func ParseColor(text string) Color {
 	text = strings.TrimSpace(text)
-	log.Println("!!!should parse ", text)
 	if strings.HasPrefix(text, "#") {
 		text = text[1:]
 		for len(text) < 8 {
 			text = text + "F"
 		}
-		log.Println("should parse ", text)
 
 		channels, _ := hex.DecodeString(text)
 		if len(channels) == 4 {

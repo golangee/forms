@@ -75,6 +75,10 @@ func (t *Stepper) SetSteps(steps ...Step) *Stepper {
 // SetProgress updates the view state of the stepper steps. Passed steps
 // are colorized using the primary color and the active step caption is bolder.
 func (t *Stepper) SetProgress(idx int) *Stepper {
+	if idx > len(t.steps) {
+		idx = len(t.steps)
+	}
+
 	for _, step := range t.steps {
 		step.setDone(false)
 		step.setActive(false)
@@ -93,6 +97,12 @@ func (t *Stepper) SetProgress(idx int) *Stepper {
 // Style applies generic style attributes.
 func (t *Stepper) Style(style ...Style) *Stepper {
 	t.HStack.Style(style...)
+	return t
+}
+
+// Self assigns the receiver to the given reference
+func (t *Stepper) Self(ref **Stepper) *Stepper {
+	*ref = t
 	return t
 }
 

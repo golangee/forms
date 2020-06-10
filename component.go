@@ -125,6 +125,9 @@ func (b *absComponent) removeAll() {
 	b.elem.SetTextContent("")
 }
 
+// TODO unclear how to handle the Release: we do not own the view so destroying is probably wrong however without relasing, we will leak a lot of stuff
+// Option a: add/set View takes ownership and remove releases it. Introduce a public detach method, if you need something else
+// Option b: register at window, if detached and if the window gets a new view to show, release all detached view (ui state change)
 func (b *absComponent) removeViewAt(i int) View {
 	a := b.children
 	child := a[i]
