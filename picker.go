@@ -30,9 +30,11 @@ type Picker struct {
 	fnd            js2.Foundation
 	selectListener func(v *Picker)
 	myOptions      []string
+	selectAnchor   h.Element
 }
 
-func NewPicker() *Picker {
+// NewPicker creates a new Combobox/Dropdown/Spinner component.
+func NewPicker(options ...string) *Picker {
 	t := &Picker{}
 	t.absComponent = newComponent(t, "div")
 	t.node().SetClassName("mdc-select mdc-select--outlined")
@@ -49,7 +51,7 @@ func NewPicker() *Picker {
 				),
 				h.Div(h.Class("mdc-notched-outline__trailing")),
 			),
-		),
+		).Self(&t.selectAnchor),
 		h.Div(h.Class("mdc-select__menu", "mdc-menu", "mdc-menu-surface"), h.Role("listbox")).Self(&t.menu),
 		h.Div(h.Class("mdc-text-field-helper-line"),
 			h.P(h.Class("mdc-text-field-helper-text", "mdc-text-field-helper-text--persistent", "mdc-text-field-helper-text--validation-msg")).Self(&t.helper),
@@ -57,6 +59,10 @@ func NewPicker() *Picker {
 	)
 
 	t.fnd = js2.Attach(js2.Select, t.node())
+	if len(options) > 0 {
+		t.SetOptions(options...)
+	}
+
 	return t
 }
 
@@ -108,6 +114,9 @@ func (t *Picker) SetSelectListener(f func(v *Picker)) *Picker {
 
 func (t *Picker) Style(style ...Style) *Picker {
 	t.absComponent.style(style...)
+	for _, s := range style {
+		s.applyCSS(t.selectAnchor)
+	}
 	return t
 }
 

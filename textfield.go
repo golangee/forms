@@ -16,8 +16,10 @@ package forms
 
 import (
 	h "github.com/golangee/forms/dom"
+	"github.com/golangee/forms/property"
 	"github.com/golangee/forms/theme/material/icon"
 	js2 "github.com/golangee/forms/theme/material/js"
+	"syscall/js"
 )
 
 type InputType string
@@ -50,11 +52,16 @@ type TextField struct {
 	input          h.Element
 	fndTF          js2.Foundation
 	dirty          bool
+	textProperty   property.String
 }
 
 func NewTextField() *TextField {
 	t := &TextField{}
 	t.absComponent = newComponent(t, "div")
+	t.textProperty = property.NewString()
+	t.textProperty.Observe(func(old, new string) {
+		t.SetText(new)
+	})
 	labelId := nextId()
 	h.Wrap(t.node(), h.Class("text-field-container"),
 		h.Div(h.Class("mdc-text-field", "mdc-text-field--outlined"), h.Class("mdc-text-field--no-label"),
@@ -76,6 +83,10 @@ func NewTextField() *TextField {
 			h.Div(h.Class()).Self(&t.characterCount),
 		).Self(&t.helperLine),
 	)
+	t.addResource(t.input.AddEventListener("change", func(this js.Value, args []js.Value) interface{} {
+		t.textProperty.Set(t.Text())
+		return nil
+	}, false))
 	t.labelNotch.Style().Set("display", "none")
 	t.invalidate(false)
 	return t
@@ -136,6 +147,21 @@ func (t *TextField) SetText(str string) *TextField {
 	return t
 }
 
+func (t *TextField) Text() string {
+	return t.input.Unwrap().Get("value").String()
+}
+
+// TextProperty returns a text property.
+func (t *TextField) TextProperty() property.String {
+	return t.textProperty
+}
+
+// BindText is a shortcut for TextProperty().Bind() and returning self.
+func (t *TextField) BindText(s *string) *TextField {
+	t.TextProperty().Bind(s)
+	return t
+}
+
 func (t *TextField) SetLabel(str string) *TextField {
 	t.mdcTextField.RemoveClass("mdc-text-field--no-label")
 	if len(str) == 0 {
@@ -152,11 +178,12 @@ func (t *TextField) SetLabel(str string) *TextField {
 // Styles changes the container
 func (t *TextField) Style(style ...Style) *TextField {
 	t.absComponent.style(style...)
+	t.inputStyle(style...)
 	return t
 }
 
-// Styles changes the
-func (t *TextField) InputStyle(styles ...Style) *TextField {
+// InputStyle changes the internal field style.
+func (t *TextField) inputStyle(styles ...Style) *TextField {
 	for _, s := range styles {
 		s.applyCSS(t.mdcTextField)
 		_ = s

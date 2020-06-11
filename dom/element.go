@@ -130,6 +130,10 @@ func (s Element) SetAttr(key, val interface{}) Element {
 	return s
 }
 
+func (s Element) GetAttr(key interface{}) js.Value {
+	return s.absNode.Unwrap().Call("getAttribute", key)
+}
+
 func (s Element) FirstChild() Element {
 	return NewElement(s.Unwrap().Get("firstChild"))
 }

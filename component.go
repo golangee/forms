@@ -132,7 +132,7 @@ func (b *absComponent) removeViewAt(i int) View {
 	a := b.children
 	child := a[i]
 	child.detach()
-	b.elem.RemoveChild(child.node())
+	//b.elem.RemoveChild(child.node()) //TODO detach already removes the child from the dom?
 	if i < len(a)-1 {
 		copy(a[i:], a[i+1:])
 	}

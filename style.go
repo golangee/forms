@@ -44,6 +44,17 @@ const WeightBolder TypeWeight = "500"
 
 var DefaultPadding = Pixel(8)
 
+type OverflowType string
+
+const OverflowAuto OverflowType = "auto"
+const OverflowScroll OverflowType = "scroll"
+const OverflowHidden OverflowType = "hidden"
+
+type DisplayType string
+
+const DisplayVisible DisplayType = "unset"
+const DisplayNone DisplayType = "none"
+
 // A Style modifies different kinds of visualization of a View.
 type Style interface {
 	internalStyle
@@ -159,5 +170,17 @@ func FontWeight(weight TypeWeight) Style {
 func BorderRadius(scalar Scalar) Style {
 	return styleFunc(func(element dom.Element) {
 		element.Style().Set("border-radius", string(scalar))
+	})
+}
+
+func Overflow(overflow OverflowType) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().Set("overflow", string(overflow))
+	})
+}
+
+func Display(displayType DisplayType) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().Set("display", string(displayType))
 	})
 }
