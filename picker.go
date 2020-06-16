@@ -16,6 +16,7 @@ package forms
 
 import (
 	h "github.com/golangee/forms/dom"
+	"github.com/golangee/forms/property"
 	js2 "github.com/golangee/forms/theme/material/js"
 	"strconv"
 	"syscall/js"
@@ -31,6 +32,7 @@ type Picker struct {
 	selectListener func(v *Picker)
 	myOptions      []string
 	selectAnchor   h.Element
+	textProperty   property.String
 }
 
 // NewPicker creates a new Combobox/Dropdown/Spinner component.
@@ -38,6 +40,7 @@ func NewPicker(options ...string) *Picker {
 	t := &Picker{}
 	t.absComponent = newComponent(t, "div")
 	t.node().SetClassName("mdc-select mdc-select--outlined")
+	t.textProperty = property.NewString()
 
 	labelId := nextId()
 	h.Wrap(t.node(),
@@ -63,6 +66,41 @@ func NewPicker(options ...string) *Picker {
 		t.SetOptions(options...)
 	}
 
+	t.textProperty.Observe(func(old, new string) {
+		t.SetText(new)
+	})
+
+	return t
+}
+
+// SetText tries to find the text in "options" and selects the index, if possible. Otherwise does nothing.
+func (t *Picker) SetText(str string) *Picker {
+	for idx, v := range t.myOptions {
+		if v == str {
+			t.SetSelected(idx)
+			break
+		}
+	}
+
+	return t
+}
+
+// Text returns the current selected option text. If nothing is selected returns the empty string.
+func (t *Picker) Text() string {
+	return t.selectedString()
+}
+
+// TextProperty returns a text property to or get the text.
+func (t *Picker) TextProperty() property.String {
+	return t.textProperty
+}
+
+// BindText is a shortcut for TextProperty().Bind() and returning self.
+// If used together with #SetSelected() the order matters. When populated from/to a model,
+// you likely want to first select a default (by index) and then bind to the model, which reads the value
+// from the given pointer. However if that is invalid, it does nothing, otherwise selects the right index by name.
+func (t *Picker) BindText(s *string) *Picker {
+	t.TextProperty().Bind(s)
 	return t
 }
 
@@ -99,6 +137,7 @@ func (t *Picker) SetOptions(options ...string) *Picker {
 
 	t.fnd = js2.Attach(js2.Select, t.node())
 	t.addResource(t.node().AddEventListener("MDCSelect:change", func(this js.Value, args []js.Value) interface{} {
+		t.textProperty.Set(t.selectedString())
 		if t.selectListener != nil {
 			t.selectListener(t)
 		}
@@ -125,26 +164,18 @@ func (t *Picker) Selected() int {
 }
 
 func (t *Picker) SetSelected(idx int) *Picker {
+	if t.Selected() == idx {
+		return t // debounce
+	}
+
 	t.fnd.Unwrap().Set("selectedIndex", idx)
 	return t
 }
 
-func (t *Picker) SetSelectedString(str string) *Picker {
-	for idx, v := range t.myOptions {
-		if v == str {
-			t.SetSelected(idx)
-			break
-		}
-	}
-	return t
-}
-
-func (t *Picker) SelectedString() string {
+func (t *Picker) selectedString() string {
 	idx := t.Selected()
-	for i, v := range t.myOptions {
-		if i == idx {
-			return v
-		}
+	if idx >= 0 && idx < len(t.myOptions) {
+		return t.myOptions[idx]
 	}
 
 	return ""

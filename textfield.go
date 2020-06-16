@@ -19,6 +19,7 @@ import (
 	"github.com/golangee/forms/property"
 	"github.com/golangee/forms/theme/material/icon"
 	js2 "github.com/golangee/forms/theme/material/js"
+	"strconv"
 	"syscall/js"
 )
 
@@ -53,15 +54,23 @@ type TextField struct {
 	fndTF          js2.Foundation
 	dirty          bool
 	textProperty   property.String
+	intProperty    property.Int
 }
 
 func NewTextField() *TextField {
 	t := &TextField{}
 	t.absComponent = newComponent(t, "div")
+
 	t.textProperty = property.NewString()
 	t.textProperty.Observe(func(old, new string) {
 		t.SetText(new)
 	})
+
+	t.intProperty = property.NewInt()
+	t.intProperty.Observe(func(old, new int) {
+		t.SetText(strconv.Itoa(new))
+	})
+
 	labelId := nextId()
 	h.Wrap(t.node(), h.Class("text-field-container"),
 		h.Div(h.Class("mdc-text-field", "mdc-text-field--outlined"), h.Class("mdc-text-field--no-label"),
@@ -84,7 +93,14 @@ func NewTextField() *TextField {
 		).Self(&t.helperLine),
 	)
 	t.addResource(t.input.AddEventListener("change", func(this js.Value, args []js.Value) interface{} {
-		t.textProperty.Set(t.Text())
+		v := t.Text()
+
+		t.textProperty.Set(v)
+		i, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			t.intProperty.Set(int(i))
+		}
+
 		return nil
 	}, false))
 	t.labelNotch.Style().Set("display", "none")
@@ -141,24 +157,43 @@ func (t *TextField) SetEnabled(b bool) *TextField {
 	return t
 }
 
+// SetText updates the text
 func (t *TextField) SetText(str string) *TextField {
 	t.input.SetAttr("value", str)
 	t.invalidate(false)
 	return t
 }
 
+// Text returns the current text
 func (t *TextField) Text() string {
 	return t.input.Unwrap().Get("value").String()
 }
 
-// TextProperty returns a text property.
+// TextProperty returns a text property to set or get the text.
 func (t *TextField) TextProperty() property.String {
 	return t.textProperty
 }
 
-// BindText is a shortcut for TextProperty().Bind() and returning self.
+// IntProperty returns an int property to set or get the text with integer to string conversions.
+func (t *TextField) IntProperty() property.Int {
+	return t.intProperty
+}
+
+// BindText is a shortcut for TextProperty().Bind() and returning self. Initially the value is read
+// from the pointers position and the component is populated. Afterwards only the value at the pointer
+// location is updated by the component.
 func (t *TextField) BindText(s *string) *TextField {
 	t.TextProperty().Bind(s)
+	return t
+}
+
+// BindInt is a shortcut for IntProperty().Bind() and returning self. Initially the value is read
+// from the pointers position and the component is populated. Afterwards only the value at the pointer
+// location is updated by the component.
+//
+// Text values which cannot be parsed as integers, are ignored.
+func (t *TextField) BindInt(s *int) *TextField {
+	t.IntProperty().Bind(s)
 	return t
 }
 

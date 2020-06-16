@@ -1,61 +1,61 @@
 package property
 
-// String defines the contract for a string property.
-type String interface {
+// Int defines the contract for an int property.
+type Int interface {
 	// Set updates the property value and fires an event, if the new value is different than the old value.
-	Set(v string)
+	Set(v int)
 
 	// Get returns the current property value
-	Get() string
+	Get() int
 
 	// Bind connects the given pointer to a string with the value. The first time, the value from dst is read and
 	// populates the property. Afterwards the direction is always the opposite, and updates to the property
 	// will update the dst.
-	Bind(dst *string)
+	Bind(dst *int)
 
 	// Observe registers a callback which is fired, if the value has been set. It is not fire, if the value has not
 	// been changed, e.g. if setting the same string.
-	Observe(onDidSet func(old, new string)) Func
+	Observe(onDidSet func(old, new int)) Func
 }
 
-// NewString creates a new self-contained property.
-func NewString() String {
-	return &stringProperty{absProperty: newAbsProperty()}
+// NewInt creates a new self-contained property.
+func NewInt() Int {
+	return &intProperty{absProperty: newAbsProperty()}
 }
 
-type stringProperty struct {
+type intProperty struct {
 	*absProperty
 }
 
-func (s *stringProperty) Set(v string) {
+func (s *intProperty) Set(v int) {
 	s.absProperty.Set(v)
 }
 
-func (s *stringProperty) Get() string {
+func (s *intProperty) Get() int {
 	if s.absProperty.Get() == nil {
-		return ""
+		return 0
 	}
 
-	return s.absProperty.Get().(string)
+	return s.absProperty.Get().(int)
 }
 
 // TODO when and where to unbind?
-func (s *stringProperty) Bind(dst *string) {
+func (s *intProperty) Bind(dst *int) {
 	s.absProperty.Observe(func(old, new interface{}) {
-		*dst = new.(string)
+		*dst = new.(int)
 	})
 	// TODO unclear if this is a good idea, it is the only time, it will make this way
 	s.Set(*dst)
 }
 
-func (s *stringProperty) Observe(onDidSet func(old, new string)) Func {
+func (s *intProperty) Observe(onDidSet func(old, new int)) Func {
 	return s.absProperty.Observe(func(old, new interface{}) {
 		if old == nil {
-			old = ""
+			old = 0
 		}
 
 		if old != new {
-			onDidSet(old.(string), new.(string))
+			onDidSet(old.(int), new.(int))
 		}
 	})
 }
