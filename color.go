@@ -93,8 +93,8 @@ const (
 	Amber50      Color = 0xFFC107FF
 	Orange50     Color = 0xFF9800FF
 	DeepOrange50 Color = 0xFF5722FF
-	Brown50      Color = 0x795548
-	Gray50       Color = 0x9e9e9e
+	Brown50      Color = 0x795548FF
+	Gray50       Color = 0x9e9e9eFF
 	BlueGray50   Color = 0x607D8BFF
 )
 

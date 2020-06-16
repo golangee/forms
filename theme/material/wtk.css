@@ -213,6 +213,7 @@ body {
 
 .main-content {
     /*margin: 20px 50px;*/
+    width:100%; /* to be more consistent with mobile view*/
     max-width:613px; /* 900 - 255 - 16 -16*/
     margin-left:auto;
     margin-right:auto;

@@ -85,14 +85,16 @@ func (t *Grid) SetAreas(areas [][]string) *Grid {
 
 // SetColumnWidths defines two things: firstly how many columns at all and secondly how they are calculated.
 // You can also use the *Auto*-scalar.
-func (t *Grid) SetColumnWidths(scalars ...Scalar) {
+func (t *Grid) SetColumnWidths(scalars ...Scalar) *Grid {
 	t.node().Style().Set("grid-template-columns", strings.Join(scalarSlice(scalars).toStrings(), " "))
+	return t
 }
 
 // SetRowHeights defines two things: firstly how many rows at all and secondly how they are calculated.
 // You can also use the *Auto*-scalar.
-func (t *Grid) SetRowHeights(scalars ...Scalar) {
+func (t *Grid) SetRowHeights(scalars ...Scalar) *Grid {
 	t.node().Style().Set("grid-template-rows", strings.Join(scalarSlice(scalars).toStrings(), " "))
+	return t
 }
 
 // SetGap defines the margin between all children.
