@@ -16,6 +16,7 @@ package forms
 
 import (
 	h "github.com/golangee/forms/dom"
+	"github.com/golangee/forms/event"
 	"github.com/golangee/forms/property"
 	"github.com/golangee/forms/theme/material/icon"
 	js2 "github.com/golangee/forms/theme/material/js"
@@ -84,7 +85,6 @@ func NewTextField() *TextField {
 				).Self(&t.labelNotch),
 				h.Div(h.Class("mdc-notched-outline__trailing")),
 			),
-
 		).Self(&t.mdcTextField),
 		h.Div(h.Class("mdc-text-field-helper-line"),
 			h.Div(h.Class("mdc-text-field-helper-text", "mdc-text-field-helper-text--persistent", "mdc-text-field-helper-text--validation-msg")).Self(&t.helperText),
@@ -103,6 +103,7 @@ func NewTextField() *TextField {
 
 		return nil
 	}, false))
+	t.helperLine.Style().Set("display", "none")
 	t.labelNotch.Style().Set("display", "none")
 	t.invalidate(false)
 	return t
@@ -135,6 +136,17 @@ func (t *TextField) SetLeadingIcon(ico icon.Icon) *TextField {
 	return t
 }
 
+func (t *TextField) AddTrailingIconClickListener(f func(v View)) *TextField {
+	t.trailingIco.SetTabIndex(1)
+	t.trailingIco.SetRole("button")
+	t.absComponent.addResource(t.trailingIco.AddEventListener(string(event.Click), func(this js.Value, args []js.Value) interface{} {
+		f(t)
+		return nil
+	}, false))
+
+	return t
+}
+
 func (t *TextField) SetTrailingIcon(ico icon.Icon) *TextField {
 	t.mdcTextField.RemoveClass("mdc-text-field--with-trailing-icon")
 	if len(ico) > 0 {
@@ -144,6 +156,17 @@ func (t *TextField) SetTrailingIcon(ico icon.Icon) *TextField {
 		t.trailingIco.Style().Set("display", "none")
 	}
 	t.trailingIco.SetText(string(ico))
+	return t
+}
+
+func (t *TextField) AddLeadingIconClickListener(f func(v View)) *TextField {
+	t.leadingIco.SetTabIndex(0)
+	t.leadingIco.SetRole("button")
+	t.absComponent.addResource(t.leadingIco.AddEventListener(string(event.Click), func(this js.Value, args []js.Value) interface{} {
+		f(t)
+		return nil
+	}, false))
+
 	return t
 }
 
@@ -159,7 +182,7 @@ func (t *TextField) SetEnabled(b bool) *TextField {
 
 // SetText updates the text
 func (t *TextField) SetText(str string) *TextField {
-	t.input.SetAttr("value", str)
+	t.input.Unwrap().Set("value", str)
 	t.invalidate(false)
 	return t
 }
@@ -240,6 +263,11 @@ func (t *TextField) SetRange(min, max int) *TextField {
 
 func (t *TextField) SetHelper(str string) *TextField {
 	t.helperText.SetTextContent(str)
+	if str == "" {
+		t.helperLine.Style().Set("display", "none")
+	} else {
+		t.helperLine.Style().Set("display", "block")
+	}
 	return t
 }
 
@@ -295,4 +323,40 @@ func (t *TextField) attach(v View) {
 func (t *TextField) Release() {
 	t.fndTF.Release()
 	t.absComponent.Release()
+}
+
+// AddClickListener registers another click listener
+func (t *TextField) AddClickListener(f func(v View)) *TextField {
+	t.addEventListener(event.Click, func(v View, params []js.Value) {
+		f(v)
+	})
+	return t
+}
+
+// AddKeyUpListener registers another key listener
+func (t *TextField) AddKeyUpListener(f func(v View, keyCode int)) *TextField {
+	t.addEventListener(event.KeyUp, func(v View, params []js.Value) {
+		f(v, params[0].Get("keyCode").Int())
+	})
+	return t
+}
+
+// AddKeyDownListener registers another key listener
+func (t *TextField) AddKeyDownListener(f func(v View, keyCode int)) *TextField {
+	t.addEventListener(event.KeyDown, func(v View, params []js.Value) {
+		f(v, params[0].Get("keyCode").Int())
+	})
+	return t
+}
+
+// AddFocusOutListener registers another key listener
+func (t *TextField) AddFocusChangeListener(f func(v View, hasFocus bool)) *TextField {
+	t.addEventListener(event.FocusOut, func(v View, params []js.Value) {
+		f(v, false)
+	})
+
+	t.addEventListener(event.FocusIn, func(v View, params []js.Value) {
+		f(v, true)
+	})
+	return t
 }

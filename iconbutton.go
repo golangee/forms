@@ -18,6 +18,7 @@ import (
 	"github.com/golangee/forms/event"
 	"github.com/golangee/forms/theme/material/icon"
 	"github.com/golangee/forms/theme/material/js"
+	js2 "syscall/js"
 )
 
 // An IconButton is a rounded button with an icon or a single character on it
@@ -76,7 +77,9 @@ func (t *IconButton) Self(ref **IconButton) *IconButton {
 
 // AddClickListener registers another click listener
 func (t *IconButton) AddClickListener(f func(v View)) *IconButton {
-	t.addEventListener(event.Click, f)
+	t.addEventListener(event.Click, func(v View, params []js2.Value) {
+		f(v)
+	})
 	return t
 }
 

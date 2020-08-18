@@ -103,6 +103,9 @@ func (b *absComponent) node() dom.Element {
 }
 
 func (b *absComponent) addView(child View) {
+	if child == nil {
+		panic("adding nil view not allowed")
+	}
 	b.elem.AppendChild(child.node())
 	child.attach(b)
 	b.children = append(b.children, child)
@@ -119,6 +122,9 @@ func (b *absComponent) removeView(child View) {
 
 func (b *absComponent) removeAll() {
 	for _, view := range b.children {
+		if view == nil {
+			panic("illegal state: child view is nil")
+		}
 		view.detach()
 	}
 	b.children = nil
@@ -138,6 +144,8 @@ func (b *absComponent) removeViewAt(i int) View {
 	}
 	a[len(a)-1] = nil
 	a = a[:len(a)-1]
+
+	b.children = a
 	return child
 }
 
@@ -160,9 +168,10 @@ func (b *absComponent) Release() {
 	}
 }
 
-func (b *absComponent) addEventListener(t event.Type, f func(v View)) {
-	ref := b.this.node().AddEventListener(string(t), func(_ js.Value, _ []js.Value) interface{} {
-		f(b.this)
+func (b *absComponent) addEventListener(t event.Type, f func(v View, params []js.Value)) {
+	ref := b.this.node().AddEventListener(string(t), func(_ js.Value, params []js.Value) interface{} {
+		params[0].Call("stopPropagation")
+		f(b.this, params)
 		return nil
 	}, false)
 	b.resources = append(b.resources, ref)

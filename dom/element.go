@@ -83,7 +83,7 @@ func (s Element) SetAriaHidden(b bool) Element {
 }
 
 func (s Element) SetTabIndex(i int) Element {
-	s.val.Set("tabindex", i)
+	s.val.Set("tabIndex", i)
 	return s
 }
 

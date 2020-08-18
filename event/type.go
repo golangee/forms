@@ -18,5 +18,13 @@ package event
 // A Type defines which kind of event is listened to.
 type Type string
 
-// Click occurs when the user clicks on a View
-const Click Type = "click"
+const (
+	// Click occurs when the user clicks on a View
+	Click    Type = "click"
+	KeyDown  Type = "keydown"
+	KeyPress Type = "keypress"
+	KeyUp    Type = "keyup"
+	FocusOut Type = "focusout"
+	FocusIn  Type = "focusin"
+	Blur     Type = "blur"
+)

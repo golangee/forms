@@ -55,6 +55,13 @@ type DisplayType string
 const DisplayVisible DisplayType = "unset"
 const DisplayNone DisplayType = "none"
 
+type PositionType string
+
+const PositionAbsolute PositionType = "absolute"
+const PositionFixed PositionType = "fixed"
+const PositionRelative PositionType = "relative"
+const PositionInitial PositionType = "initial"
+
 // A Style modifies different kinds of visualization of a View.
 type Style interface {
 	internalStyle
@@ -182,5 +189,11 @@ func Overflow(overflow OverflowType) Style {
 func Display(displayType DisplayType) Style {
 	return styleFunc(func(element dom.Element) {
 		element.Style().Set("display", string(displayType))
+	})
+}
+
+func Position(position PositionType) Style {
+	return styleFunc(func(element dom.Element) {
+		element.Style().Set("position", string(position))
 	})
 }

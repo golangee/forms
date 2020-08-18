@@ -19,6 +19,7 @@ import (
 	"github.com/golangee/forms/event"
 	"github.com/golangee/forms/theme/material/icon"
 	"github.com/golangee/forms/theme/material/js"
+	js2 "syscall/js"
 )
 
 type ButtonStyleKind string
@@ -105,6 +106,8 @@ func (t *Button) Self(ref **Button) *Button {
 
 // AddClickListener registers another click listener
 func (t *Button) AddClickListener(f func(v View)) *Button {
-	t.addEventListener(event.Click, f)
+	t.addEventListener(event.Click, func(v View, params []js2.Value) {
+		f(v)
+	})
 	return t
 }

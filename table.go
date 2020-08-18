@@ -16,7 +16,9 @@ package forms
 
 import (
 	"github.com/golangee/forms/dom"
+	"github.com/golangee/forms/event"
 	"sort"
+	"syscall/js"
 )
 
 type Table struct {
@@ -32,6 +34,7 @@ type Table struct {
 	checkboxHeader     *Checkbox
 	showRowSelection   bool
 	onSelectionChanged func(t *Table)
+	rowClickListener   func(v View, rowIdx int)
 }
 
 func NewTable() *Table {
@@ -80,7 +83,6 @@ func (t *Table) SetHeader(columns ...View) *Table {
 	return t
 }
 
-
 func (t *Table) selectRow(idx int, selected bool) *Table {
 	t.selectedRows[idx] = selected
 	if idx < len(t.nodeRows) && idx >= 0 {
@@ -95,6 +97,8 @@ func (t *Table) selectRow(idx int, selected bool) *Table {
 
 func (t *Table) AddRow(columns ...View) *Table {
 	row := dom.CreateElement("tr").AddClass("mdc-data-table__row")
+
+	rowIdx := len(t.nodeRows)
 	t.nodeRows = append(t.nodeRows, row)
 	if t.selectedRows[len(t.nodeRows)-1] {
 		row.AddClass("mdc-data-table__row--selected")
@@ -116,6 +120,14 @@ func (t *Table) AddRow(columns ...View) *Table {
 	}
 
 	t.tbody.AppendChild(row)
+
+	t.absComponent.addResource(row.AddEventListener(string(event.Click), func(this js.Value, args []js.Value) interface{} {
+		if t.rowClickListener != nil {
+			t.rowClickListener(t, rowIdx)
+		}
+
+		return nil
+	}, false))
 
 	return t
 }
@@ -248,5 +260,12 @@ func (t *Table) Style(style ...Style) *Table {
 // Self assigns the receiver to the given pointer to reference
 func (t *Table) Self(ref **Table) *Table {
 	*ref = t
+	return t
+}
+
+// SetRowClickListener registers a row click listener, which has nothing to do with the
+// row selection.
+func (t *Table) SetRowClickListener(f func(v View, rowIdx int)) *Table {
+	t.rowClickListener = f
 	return t
 }

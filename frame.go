@@ -46,6 +46,20 @@ func (t *Frame) SetView(v View) *Frame {
 	return t
 }
 
+func (t *Frame) AppendViews(views ...View) ViewGroup {
+	t.SetView(views[0])
+	return t
+}
+
+func (t *Frame) ClearViews() ViewGroup {
+	return t.RemoveAll()
+}
+
+func (t *Frame) RemoveAll() *Frame {
+	t.absComponent.removeAll()
+	return t
+}
+
 func (t *Frame) Style(style ...Style) *Frame {
 	t.absComponent.style(style...)
 	return t
